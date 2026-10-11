@@ -1,0 +1,8 @@
+{
+  "name": "nfbp-tools",
+  "private": true,
+  "description": "Validation tools for the Markdown edition of Navigation Filter Best Practices",
+  "dependencies": {
+    "katex": "0.16.11"
+  }
+}
