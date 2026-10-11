@@ -3,6 +3,7 @@
   "private": true,
   "description": "Validation tools for the Markdown edition of Navigation Filter Best Practices",
   "dependencies": {
-    "katex": "0.16.11"
+    "katex": "0.16.11",
+    "playwright": "1.49.1"
   }
 }

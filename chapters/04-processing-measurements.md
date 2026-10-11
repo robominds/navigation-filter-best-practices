@@ -1,4 +1,4 @@
-[← Chapter 3. The Covariance Matrix](03-the-covariance-matrix.md) · [Contents](README.md) · [Chapter 5. Measurement Underweighting →](05-measurement-underweighting.md)
+[← Chapter 3. The Covariance Matrix (part 3 of 3)](03-the-covariance-matrix-part3.md) · [Contents](README.md) · [Chapter 5. Measurement Underweighting →](05-measurement-underweighting.md)
 
 # <span id="page-58-2"></span><span id="page-58-0"></span>Chapter 4. Processing Measurements
 
@@ -8,150 +8,144 @@ This chapter will discuss how to handle real-world measurement processing issues
 
 ## 4.1. Measurement Latency
 
-<span id="page-58-1"></span>In general, the measurement time tags are not going to be equal to the current filter epoch time, $t_k$. To state it another way, the measurements do not come in at the current filter time. Rather, they may be latent by up to $p$ seconds. Thus, a situation will arise where the filter has propagated its state and covariance to time $t = t_k$ from time $t = t_{k-1}$, and is subsequently given a measurement to be filtered (denoted by subscript $m$) that corresponds to the time $t = t_m$, where
+<span id="page-58-1"></span>In general, the measurement time tags are not going to be equal to the current filter epoch time, $`t_k`$. To state it another way, the measurements do not come in at the current filter time. Rather, they may be latent by up to $`p`$ seconds. Thus, a situation will arise where the filter has propagated its state and covariance to time $`t = t_k`$ from time $`t = t_{k-1}`$, and is subsequently given a measurement to be filtered (denoted by subscript $`m`$) that corresponds to the time $`t = t_m`$, where
 
-$$
-t_m \leq t_k \tag{4.1}
-$$
+```math
+t_m \leq t_k \qquad\qquad(4.1)
+```
 
-If $\Delta t = t_m - t_k$ is not insignificant, the time difference between the measurement and the filter state and covariance will need to be accounted for during filtering in order to accurately process the measurement. This can be done in much the same way a batch filter operates (see pages 196-197 of Tapley [[81](16-bibliography.md#page-173-3)]). If the measurement at time $t = t_m$ is denoted as $\mathsf{y}_m$, the nominal filter state at that time is given by $\boldsymbol{\mathsf{X}}_m^* \equiv \boldsymbol{\mathsf{X}}^*(t_m)$ ($*$ denotes the nominal), and the measurement model is denoted as $h_m\left(\boldsymbol{\mathsf{X}}_m, t_m\right)$, then one can expand the measurement model to first order about the nominal filter state to get
+If $`\Delta t = t_m - t_k`$ is not insignificant, the time difference between the measurement and the filter state and covariance will need to be accounted for during filtering in order to accurately process the measurement. This can be done in much the same way a batch filter operates (see pages 196-197 of Tapley [[81](16-bibliography.md#page-173-3)]). If the measurement at time $`t = t_m`$ is denoted as $`{𝗒}_m`$, the nominal filter state at that time is given by $`{𝗫}_m^* \equiv {𝗫}^*(t_m)`$ ($`*`$ denotes the nominal), and the measurement model is denoted as $`h_m\left({𝗫}_m, t_m\right)`$, then one can expand the measurement model to first order about the nominal filter state to get
 
-$$
-h_m\left(\boldsymbol{\mathsf{X}}_m, t_m\right) = h_m\left(\boldsymbol{\mathsf{X}}_m^*, t_m\right) + \mathbf{H}_m\boldsymbol{\mathsf{x}}_m + \nu_m \tag{4.2}
-$$
+```math
+h_m\left({𝗫}_m, t_m\right) = h_m\Bigl({𝗫}_m^*, t_m\Bigr) + {𝐇}_m{𝘅}_m + \nu_m \qquad\qquad(4.2)
+```
 
-where $\boldsymbol{\mathsf{x}}_m = \boldsymbol{\mathsf{X}}_m - \boldsymbol{\mathsf{X}}_m^*$ and $\mathbf{H}_m$ is defined as
+where $`{𝘅}_m = {𝗫}_m - {𝗫}_m^*`$ and $`{𝐇}_m`$ is defined as
 
-$$
-\mathbf{H}_m \triangleq \left( \frac{\partial h_m\left(\boldsymbol{\mathsf{X}}, t_m\right)}{\partial \boldsymbol{\mathsf{X}}} \right)_{\boldsymbol{\mathsf{X}}=\boldsymbol{\mathsf{X}}_m^*} \tag{4.3}
-$$
+```math
+{𝐇}_m \triangleq \left( \frac{\partial h_m\left({𝗫}, t_m\right)}{\partial {𝗫}} \right)_{{𝗫}={𝗫}_m^*} \qquad\qquad(4.3)
+```
 
-The perturbed state at time $t_m$ can be written in terms of the state at time $t_k$ as follows
+The perturbed state at time $`t_m`$ can be written in terms of the state at time $`t_k`$ as follows
 
-$$
-\boldsymbol{\mathsf{x}}_m = \boldsymbol{\Phi}(t_m, t_k)\boldsymbol{\mathsf{x}}_k + \boldsymbol{\Gamma}_m\boldsymbol{\mathsf{w}}_m \tag{4.4}
-$$
+```math
+{𝘅}_m = {𝚽}(t_m, t_k){𝘅}_k + {𝚪}_m{𝘄}_m \qquad\qquad(4.4)
+```
 
 so we can compute the measurement as
 
-$$
-h_m\left(\boldsymbol{\mathsf{X}}_m, t_m\right) = h_m\left(\boldsymbol{\mathsf{X}}_m^*, t_m\right) + \mathbf{H}_m\boldsymbol{\Phi}(t_m, t_k)\boldsymbol{\mathsf{x}}_k + \mathbf{H}_m\boldsymbol{\Gamma}_m\boldsymbol{\mathsf{w}}_m + \nu_m \tag{4.5}
-$$
+```math
+h_m\left({𝗫}_m, t_m\right) = h_m\Bigl({𝗫}_m^*, t_m\Bigr) + {𝐇}_m{𝚽}(t_m, t_k){𝘅}_k + {𝐇}_m{𝚪}_m{𝘄}_m + \nu_m \qquad\qquad(4.5)
+```
 
-where the measurement noise has the characteristics $\mathrm{E}[\nu_m] = 0$ and $\mathrm{E}\big[\nu_m^2\big] = R_m$, the state process noise from $t = t_m$ to $t = t_k$ has the characteristics $\mathrm{E}[\boldsymbol{\mathsf{w}}_m] = \boldsymbol{\mathsf{0}}$ and $\mathrm{E}[\boldsymbol{\mathsf{w}}_m\boldsymbol{\mathsf{w}}_m^{\mathsf{T}}] = \mathbf{Q}_m$, and the state deviation is given by
+where the measurement noise has the characteristics $`\mathrm{E}[\nu_m] = 0`$ and $`\mathrm{E}\big[\nu_m^2\big] = R_m`$, the state process noise from $`t = t_m`$ to $`t = t_k`$ has the characteristics $`\mathrm{E}[{𝘄}_m] = {𝟬}`$ and $`\mathrm{E}[{𝘄}_m{𝘄}_m^{{𝖳}}] = {𝐐}_m`$, and the state deviation is given by
 
-$$
-\boldsymbol{\mathsf{x}}_k = \delta\boldsymbol{\mathsf{X}}_k = \boldsymbol{\mathsf{X}}_k - \boldsymbol{\mathsf{X}}_k^* \tag{4.6}
-$$
+```math
+{𝘅}_k = \delta{𝗫}_k = {𝗫}_k - {𝗫}_k^* \qquad\qquad(4.6)
+```
 
 (Note that the effect of the state process noise would be to increase the measurement noise variance. However, because the process noise term is very small over time periods of a few seconds, it can safely be neglected for the remainder of this analysis.)
 
 Upon taking the conditional expectation of the measurement equation and rearranging, the scalar residual of the measurement is given by
 
-$$
-\mathsf{y}_m - \widetilde{\mathbf{H}}_m\hat{\boldsymbol{\mathsf{x}}}_k(-) = \mathsf{Y}_m - h_m(\boldsymbol{\mathsf{X}}_m^*, t_m) - \mathbf{H}_m\boldsymbol{\Phi}(t_m, t_k)\hat{\boldsymbol{\mathsf{x}}}_k(-) \tag{4.7}
-$$
+```math
+{𝗒}_m - \tilde{{𝐇}}_m\hat{{𝘅}}_k(-) = {𝖸}_m - h_m({𝗫}_m^*, t_m) - {𝐇}_m{𝚽}(t_m, t_k)\hat{{𝘅}}_k(-) \qquad\qquad(4.7)
+```
 
-where $\hat{\cdot}$ denotes an estimated value,
+where $`\hat{\cdot}`$ denotes an estimated value,
 
-$$
-\begin{aligned}
-\mathsf{y}_m &= \mathsf{Y}_m - h_m(\boldsymbol{\mathsf{X}}_m^*, t_m) \\
-\hat{\boldsymbol{\mathsf{x}}}_k(-) &= \hat{\boldsymbol{\mathsf{X}}}_k(-) - \boldsymbol{\mathsf{X}}_k^*
-\end{aligned} \tag{4.8}
-$$
+```math
+\begin{aligned} {𝗒}_m &= {𝖸}_m - h_m({𝗫}_m^*, t_m) \\ \hat{{𝘅}}_k(-) &= \hat{{𝗫}}_k(-) - {𝗫}_k^* \end{aligned} \qquad\qquad(4.8)
+```
 
-The measurement partials that are used in the update, which map the measurement to the state at time $t = t_k$, are given by
+The measurement partials that are used in the update, which map the measurement to the state at time $`t = t_k`$, are given by
 
 <span id="page-59-1"></span>
-$$
-\widetilde{\mathbf{H}}_m = \mathbf{H}_m\boldsymbol{\Phi}(t_m, t_k) \tag{4.9}
-$$
+```math
+\tilde{{𝐇}}_m = {𝐇}_m{𝚽}(t_m, t_k) \qquad\qquad(4.9)
+```
 
 Eq. [4.9](#page-59-1) was derived by noting that
 
-$$
-\begin{aligned}
-\mathbf{H}_m\hat{\boldsymbol{\mathsf{x}}}_m &= \mathbf{H}_m\boldsymbol{\Phi}(t_m, t_k)\hat{\boldsymbol{\mathsf{x}}}_k \\
-&= \widetilde{\mathbf{H}}_m\hat{\boldsymbol{\mathsf{x}}}_k
-\end{aligned} \tag{4.10}
-$$
+```math
+\begin{aligned} {𝐇}_m\hat{{𝘅}}_m &= {𝐇}_m{𝚽}(t_m, t_k)\hat{{𝘅}}_k \\ &= \tilde{{𝐇}}_m\hat{{𝘅}}_k \end{aligned} \qquad\qquad(4.10)
+```
 
-From the above discussion, it is evident that the unknown quantities needed to update the state at time $t = t_k$ with a measurement from time $t = t_m$ are the nominal state at the measurement time, $\boldsymbol{\mathsf{X}}_m^*$, and the state transition matrix relating the two times, $\boldsymbol{\Phi}(t_m, t_k)$. Given those values, $h_m\left(\boldsymbol{\mathsf{X}}_m^*, t_m\right)$ and $\widetilde{\mathbf{H}}_m$ can be calculated.
+From the above discussion, it is evident that the unknown quantities needed to update the state at time $`t = t_k`$ with a measurement from time $`t = t_m`$ are the nominal state at the measurement time, $`{𝗫}_m^*`$, and the state transition matrix relating the two times, $`{𝚽}(t_m, t_k)`$. Given those values, $`h_m\Bigl({𝗫}_m^*, t_m\Bigr)`$ and $`\tilde{{𝐇}}_m`$ can be calculated.
 
-Thus the nominal state at the measurement time is calculated by back-propagating the filter state from time $t_k$ to time $t_m$. The same thing is done to calculate the required state transition matrix. The same propagation algorithms used in forward propagation ought to be utilized for the back-propagation, with the exception that the smaller time step allows for a $1^{st}$-order approximation of the matrix exponential used to update the state transition matrix.
+Thus the nominal state at the measurement time is calculated by back-propagating the filter state from time $`t_k`$ to time $`t_m`$. The same thing is done to calculate the required state transition matrix. The same propagation algorithms used in forward propagation ought to be utilized for the back-propagation, with the exception that the smaller time step allows for a $`1^{st}`$-order approximation of the matrix exponential used to update the state transition matrix.
 
 ## 4.2. Invariance to the Order of Measurement Processing
 
 <span id="page-59-0"></span>It has long been known that the performance of an EKF is dependent on the order in which one processes measurements. This is of particular import in the case when there is powerful measurement coupled with a large *a priori* error. The state (and covariance) update will be large, very likely out of the linear range. Subsequent measurements which are processed may well be outside the residual edit thresholds, and hence will be rejected. In order to remedy this, we employ a hybrid Linear/Extended Kalman Filter measurement update. Recall that in an Extended Kalman Filter, the state is updated / relinearized / rectified after each measurement is processed, regardless of whether the measurements occur at the same time. Hence, the solution is highly dependent on the *order* in which the measurements are processed. This is not a desirable situation in which to be.
 
-We obviate this difficulty simply by not updating the state until *all* the measurements at a given time are processed. We accumulate the state updates in state deviations $\boldsymbol{\mathsf{x}}$, using Algorithm [4.1.](#page-60-1) This algorithm makes use of the fact that, in the absence of process noise, a batch/least squares algorithm is mathematically equivalent to a linear Kalman Filter [[33](16-bibliography.md#page-171-7)]. Algorithm [4.1](#page-60-1) is <span id="page-60-2"></span>a recommended *best practice*. Algorithm [4.1](#page-60-1) may readily be combined with the residual mapping approach described above when the measurements are asynchronous. Algorithm [4.1](#page-60-1) may also be readily combined with Algorithm [3.1,](03-the-covariance-matrix.md#page-55-0) for cases in which the preferred factorized covariance methods are precluded.
+We obviate this difficulty simply by not updating the state until *all* the measurements at a given time are processed. We accumulate the state updates in state deviations $`{𝘅}`$, using Algorithm [4.1.](#page-60-1) This algorithm makes use of the fact that, in the absence of process noise, a batch/least squares algorithm is mathematically equivalent to a linear Kalman Filter [[33](16-bibliography.md#page-171-7)]. Algorithm [4.1](#page-60-1) is <span id="page-60-2"></span>a recommended *best practice*. Algorithm [4.1](#page-60-1) may readily be combined with the residual mapping approach described above when the measurements are asynchronous. Algorithm [4.1](#page-60-1) may also be readily combined with Algorithm [3.1,](03-the-covariance-matrix-part3.md#page-55-0) for cases in which the preferred factorized covariance methods are precluded.
 
 > <span id="page-60-1"></span>**Algorithm 4.1** Measurement Update Invariant to Order of Processing
 >
-> **for** each (scalar) measurement $j = 1$ through $k$ **do**
+> **for** each (scalar) measurement $`j = 1`$ through $`k`$ **do**
 >
-> &emsp;$\mathsf{y}_j = \mathsf{Y}_j - h_j(\boldsymbol{\mathsf{X}}_m^*, t_m)$
+> &emsp;$`{𝗒}_j = {𝖸}_j - h_j({𝗫}_m^*, t_m)`$
 >
-> &emsp;$\mathbf{H}_j = \dfrac{\partial h_j}{\partial \boldsymbol{\mathsf{X}}}(\boldsymbol{\mathsf{X}}_m^*, t_m)$
+> &emsp;$`{𝐇}_j = \dfrac{\partial h_j}{\partial {𝗫}}({𝗫}_m^*, t_m)`$
 >
-> &emsp;$\mathbf{K}_j = \mathbf{P}_j\mathbf{H}_j^{\mathsf{T}}\left(\mathbf{H}_j\mathbf{P}_j\mathbf{H}_j^{\mathsf{T}} + R_j\right)^{-1}$
+> &emsp;$`{𝐊}_j = {𝐏}_j{𝐇}_j^{{𝖳}}\Bigl({𝐇}_j{𝐏}_j{𝐇}_j^{{𝖳}} + R_j\Bigr)^{-1}`$
 >
-> &emsp;$\hat{\boldsymbol{\mathsf{x}}}_j \leftarrow \hat{\boldsymbol{\mathsf{x}}}_j + \mathbf{K}_j\left(\mathsf{y}_j - \mathbf{H}_j\hat{\boldsymbol{\mathsf{x}}}_j\right)$
+> &emsp;$`\hat{{𝘅}}_j \leftarrow \hat{{𝘅}}_j + {𝐊}_j\left({𝗒}_j - {𝐇}_j\hat{{𝘅}}_j\right)`$
 >
-> &emsp;$\mathbf{P}_j \leftarrow \left(\mathbf{I} - \mathbf{K}_j\mathbf{H}_j\right)\mathbf{P}_j\left(\mathbf{I} - \mathbf{K}_j\mathbf{H}_j\right)^{\mathsf{T}} + \mathbf{K}_j R_j\mathbf{K}_j^{\mathsf{T}}$
+> &emsp;$`{𝐏}_j \leftarrow \left({𝐈} - {𝐊}_j{𝐇}_j\right){𝐏}_j\left({𝐈} - {𝐊}_j{𝐇}_j\right)^{{𝖳}} + {𝐊}_j R_j{𝐊}_j^{{𝖳}}`$
 >
 > **end for**
 >
-> $\boldsymbol{\mathsf{X}}_m \leftarrow \boldsymbol{\mathsf{X}}_m^* + \hat{\boldsymbol{\mathsf{x}}}_j$
+> $`{𝗫}_m \leftarrow {𝗫}_m^* + \hat{{𝘅}}_j`$
 
 ## 4.3. Processing Vector Measurements
 
 <span id="page-60-0"></span>If the UDU factorization is used, the measurements are usually processed as scalars. If the vector measurements are correlated, one option is to assume they are uncorrelated and ignore the correlations between the measurements.
 
-However, there is a better alternative. Given the measurement equation ($\boldsymbol{\mathsf{Y}}_j = \mathbf{H}_j(\boldsymbol{\mathsf{X}}_j, t_j) + \boldsymbol{\nu}_j$) with measurement error covariance matrix, $\mathbf{R}_i$, first decompose the matrix with a Cholesky factorization as
+However, there is a better alternative. Given the measurement equation ($`{𝗬}_j = {𝐇}_j({𝗫}_j, t_j) + {𝝂}_j`$) with measurement error covariance matrix, $`{𝐑}_i`$, first decompose the matrix with a Cholesky factorization as
 
-$$
-\mathbf{R}_i = \mathrm{E}\big[\boldsymbol{\nu}_j\boldsymbol{\nu}_j^{\mathsf{T}}\big] = \mathbf{R}_i^{1/2}\mathbf{R}_i^{\mathsf{T}/2} \tag{4.11}
-$$
+```math
+{𝐑}_i = \mathrm{E}\big[{𝝂}_j{𝝂}_j^{{𝖳}}\big] = {𝐑}_i^{1/2}{𝐑}_i^{{𝖳}/2} \qquad\qquad(4.11)
+```
 
-and premultiply the measurement equation by $\mathbf{R}_i^{-1/2}$ to yield
+and premultiply the measurement equation by $`{𝐑}_i^{-1/2}`$ to yield
 
-$$
-\tilde{\boldsymbol{\mathsf{Y}}}_j = \tilde{\mathbf{H}}_j(\boldsymbol{\mathsf{X}}_j, t_j) + \tilde{\boldsymbol{\nu}}_j \tag{4.12}
-$$
+```math
+\tilde{{𝗬}}_j = \tilde{{𝐇}}_j({𝗫}_j, t_j) + \tilde{{𝝂}}_j \qquad\qquad(4.12)
+```
 
 with
 
-$$
-\tilde{\boldsymbol{\mathsf{Y}}}_j = \mathbf{R}_i^{-1/2}\boldsymbol{\mathsf{Y}}_j \tag{4.13}
-$$
+```math
+\tilde{{𝗬}}_j = {𝐑}_i^{-1/2}{𝗬}_j \qquad\qquad(4.13)
+```
 
-$$
-\tilde{\mathbf{H}}_j(\boldsymbol{\mathsf{X}}_j, t_j) = \mathbf{R}_i^{-1/2}\mathbf{H}_j(\boldsymbol{\mathsf{X}}_j, t_j) \tag{4.14}
-$$
+```math
+\tilde{{𝐇}}_j({𝗫}_j, t_j) = {𝐑}_i^{-1/2}{𝐇}_j({𝗫}_j, t_j) \qquad\qquad(4.14)
+```
 
-$$
-\tilde{\boldsymbol{\nu}}_j = \mathbf{R}_i^{-1/2}\boldsymbol{\nu}_j \tag{4.15}
-$$
+```math
+\tilde{{𝝂}}_j = {𝐑}_i^{-1/2}{𝝂}_j \qquad\qquad(4.15)
+```
 
-so that $\mathrm{E}[\tilde{\boldsymbol{\nu}}_j\tilde{\boldsymbol{\nu}}_j] = \mathbf{I}$. Thus, the new measurement equation has errors which are now decorrelated.
+so that $`\mathrm{E}[\tilde{{𝝂}}_j\tilde{{𝝂}}_j] = {𝐈}`$. Thus, the new measurement equation has errors which are now decorrelated.
 
-Alternatively, one can decompose the $m \times m$ measurement error covariance matrix with a UDU decomposition as $\mathbf{R}_i = \mathbf{U}_{R_i}\mathbf{D}_{R_i}\mathbf{U}_{R_i}^{\mathsf{T}}$ so that using a similar reasoning, we premultiply the measurement equation by $\mathbf{U}_{R_i}^{-1}$ so that in this case
+Alternatively, one can decompose the $`m \times m`$ measurement error covariance matrix with a UDU decomposition as $`{𝐑}_i = {𝐔}_{R_i}{𝐃}_{R_i}{𝐔}_{R_i}^{{𝖳}}`$ so that using a similar reasoning, we premultiply the measurement equation by $`{𝐔}_{R_i}^{-1}`$ so that in this case
 
-$$
-\tilde{\boldsymbol{\mathsf{Y}}}_j = \mathbf{U}_{R_i}^{-1}\boldsymbol{\mathsf{Y}}_j \tag{4.16}
-$$
+```math
+\tilde{{𝗬}}_j = {𝐔}_{R_i}^{-1}{𝗬}_j \qquad\qquad(4.16)
+```
 
-$$
-\tilde{\mathbf{H}}_j(\boldsymbol{\mathsf{X}}_j, t_j) = \mathbf{U}_{R_i}^{-1}\mathbf{H}_j(\boldsymbol{\mathsf{X}}_j, t_j) \tag{4.17}
-$$
+```math
+\tilde{{𝐇}}_j({𝗫}_j, t_j) = {𝐔}_{R_i}^{-1}{𝐇}_j({𝗫}_j, t_j) \qquad\qquad(4.17)
+```
 
-$$
-\tilde{\boldsymbol{\nu}}_j = \mathbf{U}_{R_i}^{-1}\boldsymbol{\nu}_j \tag{4.18}
-$$
+```math
+\tilde{{𝝂}}_j = {𝐔}_{R_i}^{-1}{𝝂}_j \qquad\qquad(4.18)
+```
 
-so that $\mathrm{E}[\tilde{\boldsymbol{\nu}}_j\tilde{\boldsymbol{\nu}}_j] = \mathbf{D}_{R_i}$ where $\mathbf{D}_{R_i}$ is a diagonal matrix and, as in the case of the Cholesky decomposition, the new measurement model has decorrelated measurement errors.
+so that $`\mathrm{E}[\tilde{{𝝂}}_j\tilde{{𝝂}}_j] = {𝐃}_{R_i}`$ where $`{𝐃}_{R_i}`$ is a diagonal matrix and, as in the case of the Cholesky decomposition, the new measurement model has decorrelated measurement errors.
 
 ## <span id="page-61-3"></span><span id="page-61-0"></span>4.4. Filter Cascades
 
@@ -171,4 +165,4 @@ It is worth noting that there are cases where filter cascades have been utilized
 
 ---
 
-[← Chapter 3. The Covariance Matrix](03-the-covariance-matrix.md) · [Contents](README.md) · [Chapter 5. Measurement Underweighting →](05-measurement-underweighting.md)
+[← Chapter 3. The Covariance Matrix (part 3 of 3)](03-the-covariance-matrix-part3.md) · [Contents](README.md) · [Chapter 5. Measurement Underweighting →](05-measurement-underweighting.md)

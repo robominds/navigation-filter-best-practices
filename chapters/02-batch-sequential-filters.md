@@ -1,4 +1,4 @@
-[← Chapter 1. The Extended Kalman Filter](01-the-extended-kalman-filter.md) · [Contents](README.md) · [Chapter 3. The Covariance Matrix →](03-the-covariance-matrix.md)
+[← Chapter 1. The Extended Kalman Filter](01-the-extended-kalman-filter.md) · [Contents](README.md) · [Chapter 3. The Covariance Matrix (part 1 of 3) →](03-the-covariance-matrix-part1.md)
 
 # Chapter 2. Batch-Sequential Filters
 
@@ -8,73 +8,73 @@ Most of this document discusses on-board navigation filter best practices in the
 
 ## 2.1. Batch and Batch-Sequential Filters
 
-<span id="page-32-1"></span>In the context of earlier sections of this document, consider an $m$-dimensional measurement vector $\boldsymbol{\mathsf{y}}$, which is linearly related to the $n$-dimensional vector $\boldsymbol{\mathsf{x}}$ and corrupted by measurement noise $\boldsymbol{\mathsf{v}}$:
+<span id="page-32-1"></span>In the context of earlier sections of this document, consider an $`m`$-dimensional measurement vector $`{𝘆}`$, which is linearly related to the $`n`$-dimensional vector $`{𝘅}`$ and corrupted by measurement noise $`{𝘃}`$:
 
-$$
-\boldsymbol{\mathsf{y}} = \mathbf{H}\boldsymbol{\mathsf{x}} + \boldsymbol{\mathsf{v}} \tag{2.1}
-$$
+```math
+{𝘆} = {𝐇}{𝘅} + {𝘃} \qquad\qquad(2.1)
+```
 
-where $\mathbf{H}$ is an $m \times n$ matrix and
+where $`{𝐇}`$ is an $`m \times n`$ matrix and
 
-$$
-\mathrm{E}[\boldsymbol{\mathsf{v}}] = 0 \tag{2.2}
-$$
+```math
+\mathrm{E}[{𝘃}] = 0 \qquad\qquad(2.2)
+```
 
-$$
-\mathrm{E}[\boldsymbol{\mathsf{v}}\boldsymbol{\mathsf{v}}^{\mathsf{T}}] = \mathbf{R} \tag{2.3}
-$$
+```math
+\mathrm{E}[{𝘃}{𝘃}^{{𝖳}}] = {𝐑} \qquad\qquad(2.3)
+```
 
-with $\mathbf{R}$ an $m \times m$ positive-definite matrix. Then if we choose $\boldsymbol{\mathsf{x}}$ to minimize the least-squares performance function
+with $`{𝐑}`$ an $`m \times m`$ positive-definite matrix. Then if we choose $`{𝘅}`$ to minimize the least-squares performance function
 
-$$
-J(\boldsymbol{\mathsf{x}}) = (\boldsymbol{\mathsf{y}} - \mathbf{H}\boldsymbol{\mathsf{x}})^{\mathsf{T}}\mathbf{R}^{-1}(\boldsymbol{\mathsf{y}} - \mathbf{H}\boldsymbol{\mathsf{x}}) \tag{2.4}
-$$
+```math
+J({𝘅}) = ({𝘆} - {𝐇}{𝘅})^{{𝖳}}{𝐑}^{-1}({𝘆} - {𝐇}{𝘅}) \qquad\qquad(2.4)
+```
 
-we find that the minimizing value $\hat{\boldsymbol{\mathsf{x}}}^+$ satisfies the *normal equation*
+we find that the minimizing value $`\hat{{𝘅}}^+`$ satisfies the *normal equation*
 
-$$
-\mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\mathbf{H}\hat{\boldsymbol{\mathsf{x}}}^+ = \mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\boldsymbol{\mathsf{y}}. \tag{2.5}
-$$
+```math
+{𝐇}^{{𝖳}}{𝐑}^{-1}{𝐇}\hat{{𝘅}}^+ = {𝐇}^{{𝖳}}{𝐑}^{-1}{𝘆}. \qquad\qquad(2.5)
+```
 
-This equation can be solved uniquely for $\hat{\boldsymbol{\mathsf{x}}}^+$ if $\mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\mathbf{H}$ is nonsingular. (Of course, there are potential numerical problems associated with these mathematical operations.) In addition, the error covariance matrix associated with $\hat{\boldsymbol{\mathsf{x}}}^+$ is the inverse of the information matrix $\mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\mathbf{H}$. This is, so far, a simpler estimation problem than was considered in the previous chapter in that we have said nothing yet about dynamics – we are dealing with a static estimation problem.
+This equation can be solved uniquely for $`\hat{{𝘅}}^+`$ if $`{𝐇}^{{𝖳}}{𝐑}^{-1}{𝐇}`$ is nonsingular. (Of course, there are potential numerical problems associated with these mathematical operations.) In addition, the error covariance matrix associated with $`\hat{{𝘅}}^+`$ is the inverse of the information matrix $`{𝐇}^{{𝖳}}{𝐑}^{-1}{𝐇}`$. This is, so far, a simpler estimation problem than was considered in the previous chapter in that we have said nothing yet about dynamics – we are dealing with a static estimation problem.
 
-Now let us suppose that some *a priori* information was available about $\boldsymbol{\mathsf{x}}$ before the processing of the measurements $\boldsymbol{\mathsf{y}}$ in the form of an estimate $\hat{\boldsymbol{\mathsf{x}}}^-$ and an $n \times n$ weighting matrix $\boldsymbol{\Lambda}^-$ characterizing the accuracy of the estimate (with large eigenvalues of $\boldsymbol{\Lambda}^-$ indicating good knowledge of certain linear combinations of components of $\boldsymbol{\mathsf{x}}$ and small eigenvalues indicating poor knowledge). We shall assume that
+Now let us suppose that some *a priori* information was available about $`{𝘅}`$ before the processing of the measurements $`{𝘆}`$ in the form of an estimate $`\hat{{𝘅}}^-`$ and an $`n \times n`$ weighting matrix $`{𝚲}^-`$ characterizing the accuracy of the estimate (with large eigenvalues of $`{𝚲}^-`$ indicating good knowledge of certain linear combinations of components of $`{𝘅}`$ and small eigenvalues indicating poor knowledge). We shall assume that
 
-$$
-\mathrm{E}\big[(\boldsymbol{\mathsf{x}} - \hat{\boldsymbol{\mathsf{x}}}^-)\boldsymbol{\mathsf{v}}^{\mathsf{T}}\big] = 0. \tag{2.6}
-$$
+```math
+\mathrm{E}\big[({𝘅} - \hat{{𝘅}}^-){𝘃}^{{𝖳}}\big] = 0. \qquad\qquad(2.6)
+```
 
-Then the least-squares performance function that was minimized above to provide an estimate of $\boldsymbol{\mathsf{x}}$ after the processing of the measurements can now be generalized to
+Then the least-squares performance function that was minimized above to provide an estimate of $`{𝘅}`$ after the processing of the measurements can now be generalized to
 
-$$
-J(\boldsymbol{\mathsf{x}}) = (\boldsymbol{\mathsf{x}} - \hat{\boldsymbol{\mathsf{x}}}^-)^{\mathsf{T}}\boldsymbol{\Lambda}^-(\boldsymbol{\mathsf{x}} - \hat{\boldsymbol{\mathsf{x}}}^-) + (\boldsymbol{\mathsf{y}} - \mathbf{H}\boldsymbol{\mathsf{x}})^{\mathsf{T}}\mathbf{R}^{-1}(\boldsymbol{\mathsf{y}} - \mathbf{H}\boldsymbol{\mathsf{x}}). \tag{2.7}
-$$
+```math
+J({𝘅}) = ({𝘅} - \hat{{𝘅}}^-)^{{𝖳}}{𝚲}^-({𝘅} - \hat{{𝘅}}^-) + ({𝘆} - {𝐇}{𝘅})^{{𝖳}}{𝐑}^{-1}({𝘆} - {𝐇}{𝘅}). \qquad\qquad(2.7)
+```
 
-Minimization of this quantity with respect to $\boldsymbol{\mathsf{x}}$ yields the quantity $\hat{\boldsymbol{\mathsf{x}}}^+$, which satisfies the modified normal equation
+Minimization of this quantity with respect to $`{𝘅}`$ yields the quantity $`\hat{{𝘅}}^+`$, which satisfies the modified normal equation
 
-$$
-(\boldsymbol{\Lambda}^- + \mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\mathbf{H})\hat{\boldsymbol{\mathsf{x}}}^+ = \boldsymbol{\Lambda}^-\hat{\boldsymbol{\mathsf{x}}}^- + \mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\boldsymbol{\mathsf{y}} \tag{2.8}
-$$
+```math
+({𝚲}^- + {𝐇}^{{𝖳}}{𝐑}^{-1}{𝐇})\hat{{𝘅}}^+ = {𝚲}^-\hat{{𝘅}}^- + {𝐇}^{{𝖳}}{𝐑}^{-1}{𝘆} \qquad\qquad(2.8)
+```
 
 or
 
 <span id="page-33-1"></span>
 
-$$
-(\boldsymbol{\Lambda}^- + \mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\mathbf{H})(\hat{\boldsymbol{\mathsf{x}}}^+ - \hat{\boldsymbol{\mathsf{x}}}^-) = \mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}(\boldsymbol{\mathsf{y}} - \mathbf{H}\hat{\boldsymbol{\mathsf{x}}}^-). \tag{2.9}
-$$
+```math
+({𝚲}^- + {𝐇}^{{𝖳}}{𝐑}^{-1}{𝐇})(\hat{{𝘅}}^+ - \hat{{𝘅}}^-) = {𝐇}^{{𝖳}}{𝐑}^{-1}({𝘆} - {𝐇}\hat{{𝘅}}^-). \qquad\qquad(2.9)
+```
 
-Assuming that $\boldsymbol{\Lambda}^-$ has full rank, it can be inverted, with its inverse being the error covariance matrix associated with the *a priori* estimate $\hat{\boldsymbol{\mathsf{x}}}^-$. If the updated information matrix, $\boldsymbol{\Lambda}^- + \mathbf{H}^{\mathsf{T}}\mathbf{R}^{-1}\mathbf{H}$, is invertible, Eq. [2.9](#page-33-1) may be solved for $\hat{\boldsymbol{\mathsf{x}}}^+$. The error covariance matrix associated with the solution $\hat{\boldsymbol{\mathsf{x}}}^+$ is the inverse of the updated information matrix. This updated error covariance matrix is mathematically (though not numerically) equivalent to equations for the covariance update in earlier chapters, such as Eqs. [\(1.31\)](01-the-extended-kalman-filter.md#page-28-4) and [\(1.33\)](01-the-extended-kalman-filter.md#page-28-3), although if there is process noise, $\boldsymbol{\Lambda}^-$ could be different.
+Assuming that $`{𝚲}^-`$ has full rank, it can be inverted, with its inverse being the error covariance matrix associated with the *a priori* estimate $`\hat{{𝘅}}^-`$. If the updated information matrix, $`{𝚲}^- + {𝐇}^{{𝖳}}{𝐑}^{-1}{𝐇}`$, is invertible, Eq. [2.9](#page-33-1) may be solved for $`\hat{{𝘅}}^+`$. The error covariance matrix associated with the solution $`\hat{{𝘅}}^+`$ is the inverse of the updated information matrix. This updated error covariance matrix is mathematically (though not numerically) equivalent to equations for the covariance update in earlier chapters, such as Eqs. [\(1.31\)](01-the-extended-kalman-filter.md#page-28-4) and [\(1.33\)](01-the-extended-kalman-filter.md#page-28-3), although if there is process noise, $`{𝚲}^-`$ could be different.
 
 The equations above can be extended to accommodate parameters that are not estimated, but whose uncertainties are considered by the estimator. This topic is covered in the context of batch-sequential estimators in many textbooks, including Bierman's Section VIII.2 [[5](16-bibliography.md#page-170-1)].
 
 In real spacecraft navigation problems, of course, the available measurements are unlikely to be simple linear functions of the quantities to be estimated and may be time dependent as well. Thus, given measurements of the form
 
-$$
-\boldsymbol{\mathsf{y}}(t_i) = \boldsymbol{\mathsf{h}}(\boldsymbol{\mathsf{x}}(t_i), t_i) + \boldsymbol{\mathsf{v}}(t_i) \tag{2.10}
-$$
+```math
+{𝘆}(t_i) = {𝗵}({𝘅}(t_i), t_i) + {𝘃}(t_i) \qquad\qquad(2.10)
+```
 
-quantities of the form $\mathbf{H}\boldsymbol{\mathsf{x}}$ above would be more generally replaced by $\boldsymbol{\mathsf{h}}(\boldsymbol{\mathsf{x}}(t_i), t_i)$ with the matrix $\mathbf{H}$ replaced elsewhere by the partial derivative matrix $\frac{\partial \boldsymbol{\mathsf{h}}(\boldsymbol{\mathsf{x}}(t_i), t_i)}{\partial \boldsymbol{x}(t_i)}$.
+quantities of the form $`{𝐇}{𝘅}`$ above would be more generally replaced by $`{𝗵}({𝘅}(t_i), t_i)`$ with the matrix $`{𝐇}`$ replaced elsewhere by the partial derivative matrix $`\frac{\partial {𝗵}({𝘅}(t_i), t_i)}{\partial {𝒙}(t_i)}`$.
 
 Measurements that are accumulated over some time interval may be referenced back to the estimated parameters at the start of that time interval. In [4.1,](04-processing-measurements.md#page-58-1) this document addresses the situation in which measurement time tags are not equal to the current filter epoch. The situation under discussion there is that in which some latency is associated with the measurements, so that the measurement times are earlier than the current state epoch. However, the mathematical development there is also applicable to the situation of interest here, in which the measurement times are later than the state epoch, corresponding to the state epoch being held fixed (at least temporarily) as measurements are accumulated.
 
@@ -108,4 +108,4 @@ The navigation filter architecture actually used three different batch filters, 
 
 ---
 
-[← Chapter 1. The Extended Kalman Filter](01-the-extended-kalman-filter.md) · [Contents](README.md) · [Chapter 3. The Covariance Matrix →](03-the-covariance-matrix.md)
+[← Chapter 1. The Extended Kalman Filter](01-the-extended-kalman-filter.md) · [Contents](README.md) · [Chapter 3. The Covariance Matrix (part 1 of 3) →](03-the-covariance-matrix-part1.md)

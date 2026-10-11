@@ -267,7 +267,7 @@ Finally, the contributors intend for this work to be a living document, which wi
 <span id="page-22-0"></span>
 
 | Symbol | Meaning |
-|:---:|---|
+|---|---|
 | $\mathbb{A}$ | A set |
 | $a, \alpha, A$ | Scalars |
 | $\mathbf{q}, \mathbf{M}$ | An array of scalars, e.g. column, row, matrix |
@@ -1962,13 +1962,13 @@ $$
 where $h_i(\boldsymbol{x}_i)$ is the $k$-th component of $\boldsymbol{h}(\boldsymbol{x}_i)$. Then the $k$-th component of $\boldsymbol{b}_i$ is given by
 
 $$
-b_{i,k} = \frac{1}{2}\,(\boldsymbol{e}_i^-)^{\top}\mathbf{H}_{i,k}^{\top}\boldsymbol{e}_i^- = \frac{1}{2}\;\operatorname{tr}(\mathbf{H}_{i,k}^{\top}\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top})\,. \tag{5.27}
+b_{i,k} = \frac{1}{2}\,(\boldsymbol{e}_i^-)^{\top}\mathbf{H}_{i,k}^{\top}\boldsymbol{e}_i^- = \frac{1}{2}\;\mathop{\mathrm{tr}}(\mathbf{H}_{i,k}^{\top}\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top})\,. \tag{5.27}
 $$
 
-where $\operatorname{tr}$ denotes the trace. To keep the filter unbiased, the $k$-th component of $\hat{\boldsymbol{b}}_i$ is given by
+where $\mathop{\mathrm{tr}}$ denotes the trace. To keep the filter unbiased, the $k$-th component of $\hat{\boldsymbol{b}}_i$ is given by
 
 $$
-\hat{b}_{i,k} = 1/2\,\operatorname{tr}(\mathbf{H}_{i,k}^{\top}\mathbf{P}_i^-)\,.
+\hat{b}_{i,k} = 1/2\,\mathop{\mathrm{tr}}(\mathbf{H}_{i,k}^{\top}\mathbf{P}_i^-)\,.
 $$
 
 The measurement residual is
@@ -1982,7 +1982,7 @@ $$
 Expanding Eq. [\(5.28\)](#page-68-0), the $k$-th component of the residual is obtained to be
 
 $$
-r_{i,k} = \boldsymbol{h}_{i,k}^{\top}\,\boldsymbol{e}_i^- + 1/2\,\operatorname{tr}(\mathbf{H}_i^{\top}(t_i)\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top}) - 1/2\,\operatorname{tr}(\mathbf{H}_i^{\top}(t_i)\mathbf{P}_i^-) + v_{i,k}\,, \tag{5.29}
+r_{i,k} = \boldsymbol{h}_{i,k}^{\top}\,\boldsymbol{e}_i^- + 1/2\,\mathop{\mathrm{tr}}(\mathbf{H}_i^{\top}(t_i)\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top}) - 1/2\,\mathop{\mathrm{tr}}(\mathbf{H}_i^{\top}(t_i)\mathbf{P}_i^-) + v_{i,k}\,, \tag{5.29}
 $$
 
 where $\boldsymbol{h}_{i,k}^{\top}$ is the $ik$-th row of the measurement Jacobian and $v_{i,k}$ is the $k$-th component of the measurement noise $\boldsymbol{v}_i$. Computing the measurement residual covariance $\mathrm{E}[\boldsymbol{r}_i \boldsymbol{r}_i^{\top}]$ yields
@@ -1997,15 +1997,15 @@ where matrix $\mathbf{B}_i$ is the contribution of the second order effects and 
 
 $$
 \begin{aligned}
-B_{i,kj} \triangleq{} & 1/4\,\mathrm{E}\big[\operatorname{tr}(\mathbf{H}_i^{\top}(t_i)\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top})\;\operatorname{tr}(\mathbf{H}_i^{\top}(t_i)\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top})\big] \\
-& - 1/4\;\operatorname{tr}(\mathbf{H}_i^{\top}(t_i)\mathbf{P}_i^-)\;\operatorname{tr}(\mathbf{H}_i^{\top}(t_i)\mathbf{P}_i^-)\,.
+B_{i,kj} \triangleq{} & 1/4\,\mathrm{E}\big[\mathop{\mathrm{tr}}(\mathbf{H}_i^{\top}(t_i)\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top})\;\mathop{\mathrm{tr}}(\mathbf{H}_i^{\top}(t_i)\boldsymbol{e}_i^-(\boldsymbol{e}_i^-)^{\top})\big] \\
+& - 1/4\;\mathop{\mathrm{tr}}(\mathbf{H}_i^{\top}(t_i)\mathbf{P}_i^-)\;\mathop{\mathrm{tr}}(\mathbf{H}_i^{\top}(t_i)\mathbf{P}_i^-)\,.
 \end{aligned}
 $$
 
 where it was assumed that the third order central moments are all zeros. Assuming the prior estimation error is distributed as a zero-mean gaussian distribution with covariance $\mathbf{P}_i^-$, the $ij^{th}$ component of $\mathbf{B}_i$ is given by
 
 $$
-B_{i,kj} = \frac{1}{2}\operatorname{tr}(\mathbf{H}_{i,k}^{\top}\,\mathbf{P}_i^-\,\mathbf{H}_{i,j}^{\top}\,\mathbf{P}_i^-)\,. \tag{5.31}
+B_{i,kj} = \frac{1}{2}\mathop{\mathrm{tr}}(\mathbf{H}_{i,k}^{\top}\,\mathbf{P}_i^-\,\mathbf{H}_{i,j}^{\top}\,\mathbf{P}_i^-)\,. \tag{5.31}
 $$
 
 Comparing the measurement residual covariance for the EKF in Eq. [\(5.19\)](#page-67-3) with the measurement residual covariance for the second-order filter in Eq. [\(5.30\)](#page-68-1), we see that when the nonlinearities lead to significant second-order terms which should not be neglected, then the EKF tends to provide residual covariance estimates that are not consistent with the actual errors. Typically, we address this by tuning the EKF using $\mathbf{R}_i$ as a parameter to be tweaked. If the contribution of the *a priori* estimation error $\mathbf{H}_i \mathbf{P}_i^- \mathbf{H}_i^{\top}$ to the residuals covariance is much larger than the contribution of the measurement error $\mathbf{R}_i$, the EKF algorithm will produce $\mathbf{H}_i \mathbf{P}_i^+ \mathbf{H}_i^{\top} \simeq \mathbf{R}_i$. If $\mathbf{B}_i$ is of comparable magnitude to $\mathbf{R}_i$ then the actual covariance of the posterior measurement estimate should be $\mathbf{H}_i \mathbf{P}_i^+ \mathbf{H}_i^{\top} \simeq \mathbf{R}_i + \mathbf{B}_i$. Therefore, a large underestimation of the *a posteriori* covariance can occur in the presence of nonlinearities when the estimated measurement error covariance is much larger than the measurement error covariance.
@@ -2061,7 +2061,7 @@ $$
 \mathbf{U}_i = \beta \mathbf{H}_i \mathbf{P}_i^- \mathbf{H}_i^{\top}\,. \tag{5.36}
 $$
 
-Let $\bar{\mathbf{P}}_i^- \in \mathbb{R}^{3 \times 3}$ be the partition of the state estimation error covariance associated with the position error states. The Space Shuttle employs underweighting when $\sqrt{\operatorname{tr}\bar{\mathbf{P}}_i^-} > \alpha$. The positive scalars $\alpha$ and $\beta$ are design parameters. For the Space Shuttle, $\alpha$ is selected to be 1000 meters and $\beta$ is selected to be $0.2$ [[48](#page-171-10)]. When $\sqrt{\operatorname{tr}\bar{\mathbf{P}}_i^-} > 1000$ m, then $\beta = 0.2$, otherwise $\beta = 0$.
+Let $\bar{\mathbf{P}}_i^- \in \mathbb{R}^{3 \times 3}$ be the partition of the state estimation error covariance associated with the position error states. The Space Shuttle employs underweighting when $\sqrt{\mathop{\mathrm{tr}}\bar{\mathbf{P}}_i^-} > \alpha$. The positive scalars $\alpha$ and $\beta$ are design parameters. For the Space Shuttle, $\alpha$ is selected to be 1000 meters and $\beta$ is selected to be $0.2$ [[48](#page-171-10)]. When $\sqrt{\mathop{\mathrm{tr}}\bar{\mathbf{P}}_i^-} > 1000$ m, then $\beta = 0.2$, otherwise $\beta = 0$.
 
 Orion employs a slightly different approach, underweighting is applied when $\mathbf{H}_i \mathbf{P}_i^- \mathbf{H}_i^{\top} > \alpha$, where $\alpha$ is a tunable flight software parameter.
 
@@ -2088,16 +2088,16 @@ $$
 Comparing Eqs. [\(5.37\)](#page-70-1) and [\(5.38\)](#page-70-2), the desired effect is to have
 
 $$
-\operatorname{tr}\mathbf{W}_{U,i} \geq \operatorname{tr}\mathbf{W}_i\,. \tag{5.39}
+\mathop{\mathrm{tr}}\mathbf{W}_{U,i} \geq \mathop{\mathrm{tr}}\mathbf{W}_i\,. \tag{5.39}
 $$
 
 This leads us to choose the underweighting coefficient $\beta_i$ such that
 
 $$
-\beta \geq \operatorname{tr}\mathbf{B}_i / \operatorname{tr}\mathbf{H}_i \mathbf{P}_i^- \mathbf{H}_i^{\top} \qquad \forall i. \tag{5.40}
+\beta \geq \mathop{\mathrm{tr}}\mathbf{B}_i / \mathop{\mathrm{tr}}\mathbf{H}_i \mathbf{P}_i^- \mathbf{H}_i^{\top} \qquad \forall i. \tag{5.40}
 $$
 
-The designer can run simulations before the flight and calculate the time history of $\operatorname{tr}\mathbf{B}_i / \operatorname{tr}\mathbf{H}_i \mathbf{P}_i^- \mathbf{H}_i^{\top}$ and choose an appropriate value of $\beta$. It is unlikely that higher order terms than $\mathbf{B}_i$ will need to be considered in designing the value of $\beta$.
+The designer can run simulations before the flight and calculate the time history of $\mathop{\mathrm{tr}}\mathbf{B}_i / \mathop{\mathrm{tr}}\mathbf{H}_i \mathbf{P}_i^- \mathbf{H}_i^{\top}$ and choose an appropriate value of $\beta$. It is unlikely that higher order terms than $\mathbf{B}_i$ will need to be considered in designing the value of $\beta$.
 
 # Chapter 6. Bias Modeling
 
@@ -3819,7 +3819,7 @@ $$
 where $\mathbf{K}_{opt}$ is the optimal Kalman gain computed for the full state, $\mathbf{x}$, and $\mathbf{W}$ is
 
 $$
-\mathbf{W} = \mathbf{H}_{\mathbf{s}}\mathbf{P}_{\mathbf{ss}}^-\mathbf{H}_{\mathbf{s}}^{\mathsf{T}} + \mathbf{H}_{\mathbf{s}}\mathbf{P}_{\mathbf{sp}}^-\mathbf{H}_{\mathbf{p}}^{\mathsf{T}} + \mathbf{H}_{\mathbf{p}}\mathbf{P}_{\mathbf{ps}}^-\mathbf{H}_{\mathbf{s}}^{\mathsf{T}} + {+\mathbf{H}_{\mathbf{p}}\mathbf{P}_{\mathbf{pp}}^-\mathbf{H}_{\mathbf{p}}^{\mathsf{T}}} \tag{8.58}
+\mathbf{W} = \mathbf{H}_{\mathbf{s}}\mathbf{P}_{\mathbf{ss}}^-\mathbf{H}_{\mathbf{s}}^{\mathsf{T}} + \mathbf{H}_{\mathbf{s}}\mathbf{P}_{\mathbf{sp}}^-\mathbf{H}_{\mathbf{p}}^{\mathsf{T}} + \mathbf{H}_{\mathbf{p}}\mathbf{P}_{\mathbf{ps}}^-\mathbf{H}_{\mathbf{s}}^{\mathsf{T}} + {}+\mathbf{H}_{\mathbf{p}}\mathbf{P}_{\mathbf{pp}}^-\mathbf{H}_{\mathbf{p}}^{\mathsf{T}} \tag{8.58}
 $$
 
 Therefore, if we now choose the $\mathbf{K}_{\mathbf{s}}$ and $\mathbf{K}_{\mathbf{p}}$ carefully such that the $\mathbf{K}_{\mathbf{s}} = \mathbf{K}_{\mathbf{s},opt}$, the *a posteriori* covariance matrix is
@@ -4176,12 +4176,12 @@ The quaternion representation of a given attitude matrix $\mathbf{A}$ can be fou
 
 $$
 \begin{aligned}
-\begin{bmatrix} 1 + 2A_{11} - \operatorname{tr}\mathbf{A} \\ A_{12} + A_{21} \\ A_{13} + A_{31} \\ A_{23} - A_{32} \end{bmatrix} &= 4q_1\mathbf{q}\,, &\qquad \begin{bmatrix} A_{21} + A_{12} \\ 1 + 2A_{22} - \operatorname{tr}\mathbf{A} \\ A_{23} + A_{32} \\ A_{31} - A_{13} \end{bmatrix} &= 4q_2\mathbf{q} \\
-\begin{bmatrix} A_{31} + A_{13} \\ A_{32} + A_{23} \\ 1 + 2A_{33} - \operatorname{tr}\mathbf{A} \\ A_{12} - A_{21} \end{bmatrix} &= 4q_3\mathbf{q}\,, &\qquad \begin{bmatrix} A_{23} - A_{32} \\ A_{31} - A_{13} \\ A_{12} - A_{21} \\ 1 + \operatorname{tr}\mathbf{A} \end{bmatrix} &= 4q_4\mathbf{q}
+\begin{bmatrix} 1 + 2A_{11} - \mathop{\mathrm{tr}}\mathbf{A} \\ A_{12} + A_{21} \\ A_{13} + A_{31} \\ A_{23} - A_{32} \end{bmatrix} &= 4q_1\mathbf{q}\,, &\qquad \begin{bmatrix} A_{21} + A_{12} \\ 1 + 2A_{22} - \mathop{\mathrm{tr}}\mathbf{A} \\ A_{23} + A_{32} \\ A_{31} - A_{13} \end{bmatrix} &= 4q_2\mathbf{q} \\
+\begin{bmatrix} A_{31} + A_{13} \\ A_{32} + A_{23} \\ 1 + 2A_{33} - \mathop{\mathrm{tr}}\mathbf{A} \\ A_{12} - A_{21} \end{bmatrix} &= 4q_3\mathbf{q}\,, &\qquad \begin{bmatrix} A_{23} - A_{32} \\ A_{31} - A_{13} \\ A_{12} - A_{21} \\ 1 + \mathop{\mathrm{tr}}\mathbf{A} \end{bmatrix} &= 4q_4\mathbf{q}
 \end{aligned} \tag{9.32}
 $$
 
-Numerical errors are minimized by choosing the vector with the greatest norm, which can be found by the following procedure. Find the largest of $\operatorname{tr}\mathbf{A}$ and the three diagonal elements of $\mathbf{A}$. If $\operatorname{tr}\mathbf{A}$ is the largest, then $|q_4|$ is the largest of the $|q_i|$, otherwise the largest value of $|q_i|$ is the one with the same index as the largest diagonal element of $\mathbf{A}$. The overall sign of the normalized vector is not determined, reflecting the twofold ambiguity of the quaternion representation.
+Numerical errors are minimized by choosing the vector with the greatest norm, which can be found by the following procedure. Find the largest of $\mathop{\mathrm{tr}}\mathbf{A}$ and the three diagonal elements of $\mathbf{A}$. If $\mathop{\mathrm{tr}}\mathbf{A}$ is the largest, then $|q_4|$ is the largest of the $|q_i|$, otherwise the largest value of $|q_i|$ is the one with the same index as the largest diagonal element of $\mathbf{A}$. The overall sign of the normalized vector is not determined, reflecting the twofold ambiguity of the quaternion representation.
 
 Extracting many of the other parameterizations from an attitude matrix is most easily accomplished by first extracting a quaternion and then converting to the desired representation. The kinematic equations of these other representations can also be readily derived through the intermediary of the quaternion representation.
 
@@ -4874,7 +4874,7 @@ where
 The value of $N$ should be chosen so the average is performed over one spacecraft orbital period to within a commandable tolerance.
 
 $$
-N = 2 \left( \operatorname{int} \left[ \frac{P + \delta t}{2\delta t} \right] \right)
+N = 2 \left( \mathop{\mathrm{int}} \left[ \frac{P + \delta t}{2\delta t} \right] \right)
 \tag{10.14}
 $$
 
@@ -5312,7 +5312,7 @@ $$
 \boldsymbol{\Phi}_{2_k}^{-1} = \begin{bmatrix} \mathbf{I} & \mathbf{0} \\ \mathbf{0} & \mathbf{M}_k^{-1} \end{bmatrix} \tag{B.3}
 $$
 
-where $\mathbf{M}_k^{-1} = \operatorname{diag}(1/m_{k_i}),\ i = 1, 2, 3, \cdots, n_{\mathbf{p}}$. We note that
+where $\mathbf{M}_k^{-1} = \mathop{\mathrm{diag}}(1/m_{k_i}),\ i = 1, 2, 3, \cdots, n_{\mathbf{p}}$. We note that
 
 $$
 \boldsymbol{\Phi}_{2_k}^{-1}\mathbf{Q}_{1_k}\boldsymbol{\Phi}_{2_k}^{-\mathsf{T}} = \begin{bmatrix} \mathbf{I} & \mathbf{0} \\ \mathbf{0} & \mathbf{M}_k^{-1} \end{bmatrix} \begin{bmatrix} \mathbf{Q}_{\mathbf{xx}_k} & \mathbf{0} \\ \mathbf{0} & \mathbf{0} \end{bmatrix} \begin{bmatrix} \mathbf{I} & \mathbf{0} \\ \mathbf{0} & \mathbf{M}_k^{-1} \end{bmatrix} = \begin{bmatrix} \mathbf{Q}_{\mathbf{xx}_k} & \mathbf{0} \\ \mathbf{0} & \mathbf{0} \end{bmatrix} = \mathbf{Q}_{1_k} \tag{B.4}
@@ -5360,10 +5360,10 @@ $$
 \breve{\mathbf{U}}_{\mathbf{aa}_k}\breve{\mathbf{D}}_{\mathbf{aa}_k}\breve{\mathbf{U}}_{\mathbf{aa}_k}^{\mathsf{T}} & \breve{\mathbf{U}}_{\mathbf{ac}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & \breve{\mathbf{U}}_{\mathbf{ac}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{\mathbf{cc}_k}^{\mathsf{T}} \\
 +\breve{\mathbf{U}}_{\mathbf{a}b_k}\breve{d}_{b_k}\breve{\mathbf{U}}_{\mathbf{a}b_k}^{\mathsf{T}} & +\breve{\mathbf{U}}_{\mathbf{a}b_k}\breve{d}_{b_k} & \\
 \breve{\mathbf{U}}_{\mathbf{ac}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & & \\
-\hdashline
+\hline
 \breve{d}_{b_k}\breve{\mathbf{U}}_{\mathbf{a}b_k}^{\mathsf{T}} & \breve{d}_{b_k} + \breve{\mathbf{U}}_{b\mathbf{c}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{b\mathbf{c}_k}^{\mathsf{T}} & \breve{\mathbf{U}}_{b\mathbf{c}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{\mathbf{cc}_k}^{\mathsf{T}} \\
 \breve{\mathbf{U}}_{b\mathbf{c}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & & \\
-\hdashline
+\hline
 \breve{\mathbf{U}}_{\mathbf{cc}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & \breve{\mathbf{U}}_{\mathbf{cc}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{b\mathbf{c}_k}^{\mathsf{T}} & \breve{\mathbf{U}}_{\mathbf{cc}_k}\breve{\mathbf{D}}_{\mathbf{cc}_k}\breve{\mathbf{U}}_{\mathbf{cc}_k}^{\mathsf{T}}
 \end{array}\right] \tag{B.10}
 $$
@@ -5378,10 +5378,10 @@ $$
 \widetilde{\mathbf{U}}_{\mathbf{aa}_k}\widetilde{\mathbf{D}}_{\mathbf{aa}_k}\widetilde{\mathbf{U}}_{\mathbf{aa}_k}^{\mathsf{T}} & m_{b_k}\widetilde{\mathbf{U}}_{\mathbf{ac}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & \widetilde{\mathbf{U}}_{\mathbf{ac}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{\mathbf{cc}_k}^{\mathsf{T}} \\
 +\widetilde{\mathbf{U}}_{\mathbf{a}b_k}\widetilde{d}_{b_k}\widetilde{\mathbf{U}}_{\mathbf{a}b_k}^{\mathsf{T}} & +m_{b_k}\widetilde{\mathbf{U}}_{\mathbf{a}b_k}\widetilde{d}_{b_k} & \\
 \widetilde{\mathbf{U}}_{\mathbf{ac}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & & \\
-\hdashline
+\hline
 m_{b_k}\widetilde{d}_{b_k}\widetilde{\mathbf{U}}_{\mathbf{a}b_k}^{\mathsf{T}} & m_{b_k}^2\widetilde{\mathbf{U}}_{b\mathbf{c}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{b\mathbf{c}_k}^{\mathsf{T}} & m_{b_k}\widetilde{\mathbf{U}}_{b\mathbf{c}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{\mathbf{cc}_k}^{\mathsf{T}} \\
 +m_{b_k}\widetilde{\mathbf{U}}_{b\mathbf{c}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & +m_{b_k}^2\widetilde{d}_{b_k} + q_{b_k} & \\
-\hdashline
+\hline
 \widetilde{\mathbf{U}}_{\mathbf{cc}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{\mathbf{ac}_k}^{\mathsf{T}} & m_{b_k}\widetilde{\mathbf{U}}_{\mathbf{cc}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{b\mathbf{c}_k}^{\mathsf{T}} & \widetilde{\mathbf{U}}_{\mathbf{cc}_k}\widetilde{\mathbf{D}}_{\mathbf{cc}_k}\widetilde{\mathbf{U}}_{\mathbf{cc}_k}^{\mathsf{T}}
 \end{array}\right]
 \end{aligned} \tag{B.11}

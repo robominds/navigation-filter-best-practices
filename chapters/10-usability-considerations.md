@@ -1,4 +1,4 @@
-[← Chapter 9. Attitude Estimation](09-attitude-estimation.md) · [Contents](README.md) · [Chapter 11. Smoothing →](11-smoothing.md)
+[← Chapter 9. Attitude Estimation (part 2 of 2)](09-attitude-estimation-part2.md) · [Contents](README.md) · [Chapter 11. Smoothing →](11-smoothing.md)
 
 # <span id="page-124-0"></span>Chapter 10. Usability Considerations
 
@@ -8,21 +8,19 @@ This chapter is written to address best practices for mechanisms like selective 
 
 ## 10.1. Editing
 
-<span id="page-124-1"></span>Let $\boldsymbol{\mathsf{r}} = \boldsymbol{\mathsf{y}} - \boldsymbol{h}(\boldsymbol{\mathsf{x}})$, where $\boldsymbol{\mathsf{y}}$ is the observed measurement, $\boldsymbol{h}(\boldsymbol{\mathsf{x}})$ is the value of the measurement computed from the state $\boldsymbol{\mathsf{x}}$, $\boldsymbol{\mathsf{y}} = \boldsymbol{h}(\boldsymbol{\mathsf{x}}) + \boldsymbol{\mathsf{v}}$, and $\boldsymbol{\mathsf{v}}$ is the measurement noise, $\mathrm{E}[\boldsymbol{\mathsf{v}}] = \mathbf{0}$, $\mathrm{E}[\boldsymbol{\mathsf{v}}\boldsymbol{\mathsf{v}}^{\mathsf{T}}] = \mathbf{R}$. The quantity $\boldsymbol{\mathsf{r}}$ is known as the *innovation* or sometimes the *pre-fit residual*. The covariance of $\boldsymbol{\mathsf{r}}$ is given by
+<span id="page-124-1"></span>Let $`{𝗿} = {𝘆} - {𝒉}({𝘅})`$, where $`{𝘆}`$ is the observed measurement, $`{𝒉}({𝘅})`$ is the value of the measurement computed from the state $`{𝘅}`$, $`{𝘆} = {𝒉}({𝘅}) + {𝘃}`$, and $`{𝘃}`$ is the measurement noise, $`\mathrm{E}[{𝘃}] = {𝟎}`$, $`\mathrm{E}[{𝘃}{𝘃}^{{𝖳}}] = {𝐑}`$. The quantity $`{𝗿}`$ is known as the *innovation* or sometimes the *pre-fit residual*. The covariance of $`{𝗿}`$ is given by
 
-$$
-\mathbf{W} = \mathbf{H}\mathbf{P}\mathbf{H}^{\mathsf{T}} + \mathbf{R}
-\tag{10.1}
-$$
+```math
+{𝐖} = {𝐇}{𝐏}{𝐇}^{{𝖳}} + {𝐑} \qquad\qquad(10.1)
+```
 
-where $\mathbf{P} = \mathrm{E}[\boldsymbol{\mathsf{e}}\boldsymbol{\mathsf{e}}^{\mathsf{T}}]$, $\mathbf{H} = \partial \boldsymbol{h}(\boldsymbol{\mathsf{x}})/\partial \boldsymbol{\mathsf{x}}$, and $\boldsymbol{\mathsf{e}}$ is the error in the estimate of $\boldsymbol{\mathsf{x}}$. The squared *Mahalanobis distance* associated with $\boldsymbol{\mathsf{r}}$,
+where $`{𝐏} = \mathrm{E}[{𝗲}{𝗲}^{{𝖳}}]`$, $`{𝐇} = \partial {𝒉}({𝘅})/\partial {𝘅}`$, and $`{𝗲}`$ is the error in the estimate of $`{𝘅}`$. The squared *Mahalanobis distance* associated with $`{𝗿}`$,
 
-$$
-m_{\boldsymbol{\mathsf{r}}}^2 = \boldsymbol{\mathsf{r}}^{\mathsf{T}} \mathbf{W}^{-1} \boldsymbol{\mathsf{r}}
-\tag{10.2}
-$$
+```math
+m_{{𝗿}}^2 = {𝗿}^{{𝖳}} {𝐖}^{-1} {𝗿} \qquad\qquad(10.2)
+```
 
-has a $\chi^2$ distribution with degrees of freedom equal to the number of measurements contained in the vector $\boldsymbol{\mathsf{y}}$. The statistic $m_{\boldsymbol{\mathsf{r}}}^2$, also known as the squared residual or innovations ratio, may be compared to a $\chi^2$ statistic with a given probability in order to edit outlying measurements. For a purely linear estimation scheme, such editing is unnecessary, but for an *ad hoc* linearization such as the EKF, editing is essential to prevent large innovations that would violate Taylor series truncations used to develop the EKF approximation, even in the unlikely scenario in which sensors produced measurements with noise characteristics that perfectly followed their assumed (Gaussian) probability distributions.
+has a $`\chi^2`$ distribution with degrees of freedom equal to the number of measurements contained in the vector $`{𝘆}`$. The statistic $`m_{{𝗿}}^2`$, also known as the squared residual or innovations ratio, may be compared to a $`\chi^2`$ statistic with a given probability in order to edit outlying measurements. For a purely linear estimation scheme, such editing is unnecessary, but for an *ad hoc* linearization such as the EKF, editing is essential to prevent large innovations that would violate Taylor series truncations used to develop the EKF approximation, even in the unlikely scenario in which sensors produced measurements with noise characteristics that perfectly followed their assumed (Gaussian) probability distributions.
 
 Experience has shown that it is beneficial to provide for a command-able capability to selectively apply a three-way editing flag to each measurement type. This flag may be enumerated with the labels "accept," "inhibit," and "force," or similar. The "accept" label denotes use of the measurement, if it is accepted by the aforementioned edit test (in the parlance used by Shuttle and Orion, this flag is labeled "auto"). The "inhibit" flag indicates that the measurement should be rejected regardless of the status of the edit test. The "force" flag correspondingly indicates that the measurement should be ingested regardless of the edit test result.
 
@@ -56,50 +54,45 @@ The HORP test is useful for measurements obtained from a signal between two orbi
 
 The HORP editing test starts by computing the distance between the two orbiters at the specific time instance:
 
-$$
-d = \|\vec{\boldsymbol{d}}\| = \left\| \vec{\boldsymbol{R}}_s - \frac{\vec{\boldsymbol{x}}(\vec{\boldsymbol{x}} \cdot \vec{\boldsymbol{R}}_s)}{x^2} \right\|
-\tag{10.3}
-$$
+```math
+d = \|\vec{{𝒅}}\| = \biggl\| \vec{{𝑹}}_s - \frac{\vec{{𝒙}}(\vec{{𝒙}} \cdot \vec{{𝑹}}_s)}{x^2} \biggr\| \qquad\qquad(10.3)
+```
 
-where $x = \|\vec{\boldsymbol{x}}\|$,
+where $`x = \|\vec{{𝒙}}\|`$,
 
-$$
-\vec{\boldsymbol{x}} = \vec{\boldsymbol{R}} - \vec{\boldsymbol{R}}_s
-\tag{10.4}
-$$
+```math
+\vec{{𝒙}} = \vec{{𝑹}} - \vec{{𝑹}}_s \qquad\qquad(10.4)
+```
 
 and
 
-$\vec{\boldsymbol{R}}_s$ = transmitter satellite position vector at the measurement time
+$`\vec{{𝑹}}_s`$ = transmitter satellite position vector at the measurement time
 
-$\vec{\boldsymbol{R}}$ = receiver position vector at the measurement time
+$`\vec{{𝑹}}`$ = receiver position vector at the measurement time
 
-<span id="page-127-1"></span>Accept the measurement if $d \geq R_e + h$, [Figure [10.1\]](#page-126-0), where $R_e$ equals the mean equatorial radius of the Earth (or relevant central body) and $h$ is the height of the atmosphere (a configurable parameter, based on the atmosphere applicable to the central body).
+<span id="page-127-1"></span>Accept the measurement if $`d \geq R_e + h`$, [Figure [10.1\]](#page-126-0), where $`R_e`$ equals the mean equatorial radius of the Earth (or relevant central body) and $`h`$ is the height of the atmosphere (a configurable parameter, based on the atmosphere applicable to the central body).
 
-If $d < R_e + h$ [Figure [10.2\]](#page-126-1), compute
+If $`d \lt R_e + h`$ [Figure [10.2\]](#page-126-1), compute
 
-$$
-\delta = x' - \sqrt{(R_e + h)^2 - d^2}
-\tag{10.5}
-$$
+```math
+\delta = x' - \sqrt{(R_e + h)^2 - d^2} \qquad\qquad(10.5)
+```
 
 where
 
-$$
-x' = \left\| \frac{\vec{\boldsymbol{x}} \cdot \vec{\boldsymbol{R}}_s}{x} \right\|
-\tag{10.6}
-$$
+```math
+x' = \left\| \frac{\vec{{𝒙}} \cdot \vec{{𝑹}}_s}{x} \right\| \qquad\qquad(10.6)
+```
 
-If $x' \leq \delta$, accept the measurement.
+If $`x' \leq \delta`$, accept the measurement.
 
-If $x' > \delta$, accept the measurement if $\alpha < \alpha_{\max}$, where $\alpha_{\max}$ is the maximum central angle, a configurable parameter, nominally equal to 70 degrees for Earth as a central body, given by
+If $`x' \gt \delta`$, accept the measurement if $`\alpha \lt \alpha_{\max}`$, where $`\alpha_{\max}`$ is the maximum central angle, a configurable parameter, nominally equal to 70 degrees for Earth as a central body, given by
 
-$$
-\alpha = \cos^{-1} \left( \frac{\vec{\boldsymbol{R}}_s \cdot \vec{\boldsymbol{R}}}{R_s R} \right)
-\tag{10.7}
-$$
+```math
+\alpha = \cos^{-1} \left( \frac{\vec{{𝑹}}_s \cdot \vec{{𝑹}}}{R_s R} \right) \qquad\qquad(10.7)
+```
 
-and $R_s = \|\vec{\boldsymbol{R}}_s\|$, $R = \|\vec{\boldsymbol{R}}\|$.
+and $`R_s = \|\vec{{𝑹}}_s\|`$, $`R = \|\vec{{𝑹}}\|`$.
 
 ### 10.1.2. Elevation Angle Editing
 
@@ -109,51 +102,47 @@ An elevation angle editing test can be used to identify measurements that may be
 
 *Figure 10.3. Elevation Angle Test, Represented for Ground Station to Spacecraft Atmosphere Transit*
 
-Compute the instantaneous line-of-sight vector from the receiving satellite to the $i$th transmitting ground station (GS) as follows:
+Compute the instantaneous line-of-sight vector from the receiving satellite to the $`i`$th transmitting ground station (GS) as follows:
 
-$$
-\vec{\boldsymbol{\rho}}^{\,i} = \vec{\boldsymbol{R}}(t_k) - \vec{\boldsymbol{R}}^{i}_{\text{GS}}(t_k)
-\tag{10.8}
-$$
+```math
+\vec{{𝝆}}^{\,i} = \vec{{𝑹}}(t_k) - \vec{{𝑹}}^{i}_{\text{GS}}(t_k) \qquad\qquad(10.8)
+```
 
 where
 
-$\vec{\boldsymbol{R}}(t_k)$ = position vector of the receiving satellite at time $t_k$
+$`\vec{{𝑹}}(t_k)`$ = position vector of the receiving satellite at time $`t_k`$
 
-$\vec{\boldsymbol{R}}^{i}_{\text{GS}}(t_k)$ = position vector of the $i$th transmitting GS at time $t_k$
+$`\vec{{𝑹}}^{i}_{\text{GS}}(t_k)`$ = position vector of the $`i`$th transmitting GS at time $`t_k`$
 
-The editing test is based on whether the elevation angle, $E$, of the line-of-sight vector with respect to the local horizon is greater than a minimum elevation angle, $E_{\min}$. The measurement is accepted (Fig [10.3,](#page-127-0) Case A) if the following is true:
+The editing test is based on whether the elevation angle, $`E`$, of the line-of-sight vector with respect to the local horizon is greater than a minimum elevation angle, $`E_{\min}`$. The measurement is accepted (Fig [10.3,](#page-127-0) Case A) if the following is true:
 
-$$
-\sin E > \sin E_{\min}
-\tag{10.9}
-$$
+```math
+\sin E \gt \sin E_{\min} \qquad\qquad(10.9)
+```
 
-where $E_{\min}$ is a commandable minimum elevation angle within the $\pm 90$ degrees range, and $E_{\min}$ and $E$ are positive above the local horizon and negative below the horizon. In addition, $\sin E$ is computed as:
+where $`E_{\min}`$ is a commandable minimum elevation angle within the $`\pm 90`$ degrees range, and $`E_{\min}`$ and $`E`$ are positive above the local horizon and negative below the horizon. In addition, $`\sin E`$ is computed as:
 
-$$
-\sin E = \frac{\vec{\boldsymbol{\rho}}^{\,i} \cdot \vec{\boldsymbol{R}}^{i}_{\text{GS}}(t_k)}{\|\vec{\boldsymbol{\rho}}^{\,i}\| \, \|\vec{\boldsymbol{R}}^{i}_{\text{GS}}(t_k)\|}
-\tag{10.10}
-$$
+```math
+\sin E = \frac{\vec{{𝝆}}^{\,i} \cdot \vec{{𝑹}}^{i}_{\text{GS}}(t_k)}{\|\vec{{𝝆}}^{\,i}\| \, \|\vec{{𝑹}}^{i}_{\text{GS}}(t_k)\|} \qquad\qquad(10.10)
+```
 
 Otherwise, the measurement is edited and not used to update the state.
 
 ### 10.1.3. General Angle Editing
 
-One can apply angular editing tests to other mission constraints, such as an angle between the signal source-to-sun vector and the signal source-to-spacecraft to avoid solar scintillation impacts on the signal that may corrupt the navigation observable. A common application is when the signal source is a ground station on Earth; then the resultant angle is referred to as the Sun-Earth-Probe angle. In this example shown in Figure [10.4,](#page-128-0) this angle is denoted as $\alpha$. Note that the signal source may be a relay spacecraft or a GNSS space vehicle. The threshold angle, $\alpha_{\min}$, is a configurable parameter and may vary depending on the spacecraft's distance to the sun and the power-level of the signal between the spacecraft and source.
+One can apply angular editing tests to other mission constraints, such as an angle between the signal source-to-sun vector and the signal source-to-spacecraft to avoid solar scintillation impacts on the signal that may corrupt the navigation observable. A common application is when the signal source is a ground station on Earth; then the resultant angle is referred to as the Sun-Earth-Probe angle. In this example shown in Figure [10.4,](#page-128-0) this angle is denoted as $`\alpha`$. Note that the signal source may be a relay spacecraft or a GNSS space vehicle. The threshold angle, $`\alpha_{\min}`$, is a configurable parameter and may vary depending on the spacecraft's distance to the sun and the power-level of the signal between the spacecraft and source.
 
-$$
-\alpha(t_k) = \cos^{-1} \left( \frac{\vec{\boldsymbol{R}}_S(t_k) \cdot \vec{\boldsymbol{R}}_{\text{GS-SC}}(t_k)}{R_S(t_k) \, R_{\text{GS-SC}}(t_k)} \right)
-\tag{10.11}
-$$
+```math
+\alpha(t_k) = \cos^{-1} \left( \frac{\vec{{𝑹}}_S(t_k) \cdot \vec{{𝑹}}_{\text{GS-SC}}(t_k)}{R_S(t_k) \, R_{\text{GS-SC}}(t_k)} \right) \qquad\qquad(10.11)
+```
 
 where
 
-$\vec{\boldsymbol{R}}_S(t_k)$ = Ground Station to Sun vector at the measurement time, $t_k$
+$`\vec{{𝑹}}_S(t_k)`$ = Ground Station to Sun vector at the measurement time, $`t_k`$
 
-$\vec{\boldsymbol{R}}_{\text{GS-SC}}(t_k)$ = Ground Station to Spacecraft vector at the measurement time, $t_k$
+$`\vec{{𝑹}}_{\text{GS-SC}}(t_k)`$ = Ground Station to Spacecraft vector at the measurement time, $`t_k`$
 
-Accept the measurement if $\alpha > \alpha_{\min}$. Otherwise, the measurement is edited and not used to update the state.
+Accept the measurement if $`\alpha \gt \alpha_{\min}`$. Otherwise, the measurement is edited and not used to update the state.
 
 <span id="page-128-0"></span>![](../_page_128_Diagram_14.jpeg)
 
@@ -183,64 +172,62 @@ Chebyshev polynomials provide another option to represent a backup ephemeris, an
 
 | Element | Unit | Description |
 |---------|------|-------------|
-| $T$ | days | Epoch of the elements |
-| $a$ | m | Semi-major axis |
-| $e$ | n/a | Eccentricity |
-| $i$ | deg | Inclination |
-| $\omega$ | deg | Argument of periapsis |
-| $\Omega$ | deg | Right Ascension of Ascending Node (RAAN) |
-| $M$ | deg | Mean anomaly |
-| $\dot{a}$ | m/s | Semi-major axis rate |
-| $\dot{\omega}$ | deg/s | Argument of periapsis rate |
-| $\dot{\Omega}$ | deg/s | RAAN rate |
-| $\dot{M}$ | deg/s | Mean anomaly rate<sup>a</sup> |
+| $`T`$ | days | Epoch of the elements |
+| $`a`$ | m | Semi-major axis |
+| $`e`$ | n/a | Eccentricity |
+| $`i`$ | deg | Inclination |
+| $`\omega`$ | deg | Argument of periapsis |
+| $`\Omega`$ | deg | Right Ascension of Ascending Node (RAAN) |
+| $`M`$ | deg | Mean anomaly |
+| $`\dot{a}`$ | m/s | Semi-major axis rate |
+| $`\dot{\omega}`$ | deg/s | Argument of periapsis rate |
+| $`\dot{\Omega}`$ | deg/s | RAAN rate |
+| $`\dot{M}`$ | deg/s | Mean anomaly rate<sup>a</sup> |
 
-<span id="page-130-1"></span><sup>a</sup> In Reference [[31](16-bibliography.md#page-171-22)], the mean anomaly rate, $\dot{M}$, for a LEO polar orbiting case combined mean anomaly and argument of periapsis as
+<span id="page-130-1"></span><sup>a</sup> In Reference [[31](16-bibliography.md#page-171-22)], the mean anomaly rate, $`\dot{M}`$, for a LEO polar orbiting case combined mean anomaly and argument of periapsis as
 
-$$
+```math
 \dot{M} = \frac{[M(t_2) + \omega(t_2)] - [M(t_1) + \omega(t_1)]}{t_2 - t_1}
-$$
+```
 
-whereas, for the GEO low inclination case, $\dot{M}$ also includes RAAN to give
+whereas, for the GEO low inclination case, $`\dot{M}`$ also includes RAAN to give
 
-$$
+```math
 \dot{M} = \frac{[M(t_2) + \omega(t_2) + \Omega(t_2)] - [M(t_1) + \omega(t_1) + \Omega(t_1)]}{t_2 - t_1}
-$$
+```
 
 The expected accuracy of the Brouwer-Lyddane elements for the respective orbit representations are on the order of tens of kilometers, which serves the purposes for the mission.
 
 In some applications, such as use of measurements from a Global Navigation Satellite System receiver, the receiver's independent "point solution" may serve as a useful comparison source. The periodically saved filter state that contains the full state and covariance, discussed as a means to restart the filter, also provides capability to maintain a backup ephemeris. For flight phases of limited duration, the backup ephemeris may be propagated inertially without any measurement updates. For extended operations, it will usually be necessary to re-seed the backup with a current filter state at periodic intervals.
 
-Averaged equinoctial elements offer a more accurate backup that aligns with autonomous operations and onboard processing capabilities, and more readily accommodate all trajectory types because they avoid the singularities found in classical elements. In particular, an equinoctial system of elements can be defined to represent any inclination or eccentricity, including $e = 0$ and $e > 1$. Selecting equinoctial elements and rates that vary slowly can be especially useful in a mission with variable or low-thrust. Lastly, equinoctial elements can be transformed to Cartesian or Keplerian elements. Elements averaged over a period of time that sufficiently represents the trajectory based on the filter estimates can serve as a state for comparison or to reinitialize a navigation filter to start state estimation.
+Averaged equinoctial elements offer a more accurate backup that aligns with autonomous operations and onboard processing capabilities, and more readily accommodate all trajectory types because they avoid the singularities found in classical elements. In particular, an equinoctial system of elements can be defined to represent any inclination or eccentricity, including $`e = 0`$ and $`e \gt 1`$. Selecting equinoctial elements and rates that vary slowly can be especially useful in a mission with variable or low-thrust. Lastly, equinoctial elements can be transformed to Cartesian or Keplerian elements. Elements averaged over a period of time that sufficiently represents the trajectory based on the filter estimates can serve as a state for comparison or to reinitialize a navigation filter to start state estimation.
 
-The following set of equinoctial elements [[6](16-bibliography.md#page-170-18), [15](16-bibliography.md#page-170-19)], have been successfully implemented and operationally used in onboard filters. Table [2](#page-131-0) provides a definition of the equinoctial elements $(a, h, k, p, q, \lambda)$, based on the classical Keplerian elements $(a, e, i, \Omega, \omega, M)$. As Table [2](#page-131-0) describes, the equinoctial elements can be interpreted in terms of an equinoctial coordinate frame, whose principal direction, $\hat{x}_{ep}$, is the "origin of longitudes" as shown in Figure [10.5.](#page-132-0)
+The following set of equinoctial elements [[6](16-bibliography.md#page-170-18), [15](16-bibliography.md#page-170-19)], have been successfully implemented and operationally used in onboard filters. Table [2](#page-131-0) provides a definition of the equinoctial elements $`(a, h, k, p, q, \lambda)`$, based on the classical Keplerian elements $`(a, e, i, \Omega, \omega, M)`$. As Table [2](#page-131-0) describes, the equinoctial elements can be interpreted in terms of an equinoctial coordinate frame, whose principal direction, $`\hat{x}_{ep}`$, is the "origin of longitudes" as shown in Figure [10.5.](#page-132-0)
 
 <span id="page-131-0"></span>*Table 2. Equinoctial Element System*
 
 | Element | Definition | Conversion from Keplerian Elements |
 |---------|------------|------------------------------------|
-| $a$ | Semi-major axis | $a$ |
-| $h$ | Projection of the eccentricity vector $\vec{\boldsymbol{e}}$ on the $\hat{y}_{ep}$ axis | $e\sin(\omega + \Omega)$ |
-| $k$ | Projection of the eccentricity vector $\vec{\boldsymbol{e}}$ on the $\hat{x}_{ep}$ axis | $e\,\cos(\omega + \Omega)$ |
-| $p$ | Projection of the nodal vector $\vec{\boldsymbol{N}}$ on the $\hat{y}_{ep}$ axis | $\left(\tan\left(\frac{i}{2}\right)\right)^j \sin\Omega$ |
-| $q$ | Projection of the nodal vector $\vec{\boldsymbol{N}}$ on the $\hat{x}_{ep}$ axis | $\left(\tan\left(\frac{i}{2}\right)\right)^j \cos\Omega$ |
-| $\lambda$ | Mean longitude | $M + \omega + \Omega$ |
+| $`a`$ | Semi-major axis | $`a`$ |
+| $`h`$ | Projection of the eccentricity vector $`\vec{{𝒆}}`$ on the $`\hat{y}_{ep}`$ axis | $`e\sin(\omega + \Omega)`$ |
+| $`k`$ | Projection of the eccentricity vector $`\vec{{𝒆}}`$ on the $`\hat{x}_{ep}`$ axis | $`e\,\cos(\omega + \Omega)`$ |
+| $`p`$ | Projection of the nodal vector $`\vec{{𝑵}}`$ on the $`\hat{y}_{ep}`$ axis | $`\left(\tan\left(\frac{i}{2}\right)\right)^j \sin\Omega`$ |
+| $`q`$ | Projection of the nodal vector $`\vec{{𝑵}}`$ on the $`\hat{x}_{ep}`$ axis | $`\left(\tan\left(\frac{i}{2}\right)\right)^j \cos\Omega`$ |
+| $`\lambda`$ | Mean longitude | $`M + \omega + \Omega`$ |
 
-$\vec{\boldsymbol{e}}$ = eccentricity vector pointing in the direction of the $\hat{x}_p$ axis (perifocus) with a magnitude equal to the orbital eccentricity
+$`\vec{{𝒆}}`$ = eccentricity vector pointing in the direction of the $`\hat{x}_p`$ axis (perifocus) with a magnitude equal to the orbital eccentricity
 
-$\vec{\boldsymbol{N}}$ = nodal vector pointing in the direction of the ascending node with a magnitude equal to $\left(\tan\left(\frac{i}{2}\right)\right)^j$ where $i$ denotes the orbital inclination and $j$ is defined as: $j = 1$ for direct orbits $(0 \leq i \leq 90^\circ)$; $j = -1$ for retrograde orbits $(90 < i \leq 180^\circ)$
+$`\vec{{𝑵}}`$ = nodal vector pointing in the direction of the ascending node with a magnitude equal to $`\left(\tan\left(\frac{i}{2}\right)\right)^j`$ where $`i`$ denotes the orbital inclination and $`j`$ is defined as: $`j = 1`$ for direct orbits $`(0 \leq i \leq 90^\circ)`$; $`j = -1`$ for retrograde orbits $`(90 \lt i \leq 180^\circ)`$
 
 These equinoctial elements can be averaged over more than one orbital period to define an averaged set of elements and associated rates.
 
-$$
-\overline{(E_i)^0_{\text{ref}}} = \frac{1}{N+1} \sum_{n=0}^{N} E_i(t_0 + n\,\delta t), i = 1, 5
-\tag{10.12}
-$$
+```math
+\overline{(E_i)^0_{\text{ref}}} = \frac{1}{N+1} \sum_{n=0}^{N} E_i(t_0 + n\,\delta t), i = 1, 5 \qquad\qquad(10.12)
+```
 
-$$
-\overline{(E_6)^0_{\text{ref}}} = \lambda(t_{\text{ref}})
-\tag{10.13}
-$$
+```math
+\overline{(E_6)^0_{\text{ref}}} = \lambda(t_{\text{ref}}) \qquad\qquad(10.13)
+```
 
 <span id="page-132-1"></span><span id="page-132-0"></span>![](../_page_132_Diagram_2.jpeg)
 
@@ -248,60 +235,55 @@ $$
 
 where
 
-- $\overline{(E_i)^0_{\text{ref}}}$ = reference averaged equinoctial element vector $(\bar{a}, \bar{h}, \bar{k}, \bar{p}, \bar{q}, \bar{\lambda})$ associated with the current reference time, $t_{\text{ref}}$
-- $t_{\text{ref}}$ = reference time for a new set of reference averaged equinoctial elements, equal to the center of the averaging interval
-- $t_0$ = time of the first point in the current summation interval
-- $E_i(t)$ = component of osculating equinoctial element vector at time $t$ obtained from the osculating position and velocity vectors
-- $N$ = number of osculating equinoctial element sets included in the summation
-- $\delta t$ = time interval between successive osculating equinoctial elements included in the summation, commandable parameter (recommended to be on the order of one (1) second
+- $`\overline{(E_i)^0_{\text{ref}}}`$ = reference averaged equinoctial element vector $`(\bar{a}, \bar{h}, \bar{k}, \bar{p}, \bar{q}, \bar{\lambda})`$ associated with the current reference time, $`t_{\text{ref}}`$
+- $`t_{\text{ref}}`$ = reference time for a new set of reference averaged equinoctial elements, equal to the center of the averaging interval
+- $`t_0`$ = time of the first point in the current summation interval
+- $`E_i(t)`$ = component of osculating equinoctial element vector at time $`t`$ obtained from the osculating position and velocity vectors
+- $`N`$ = number of osculating equinoctial element sets included in the summation
+- $`\delta t`$ = time interval between successive osculating equinoctial elements included in the summation, commandable parameter (recommended to be on the order of one (1) second
 
-The value of $N$ should be chosen so the average is performed over one spacecraft orbital period to within a commandable tolerance.
+The value of $`N`$ should be chosen so the average is performed over one spacecraft orbital period to within a commandable tolerance.
 
-$$
-N = 2 \left( \operatorname{int} \left[ \frac{P + \delta t}{2\delta t} \right] \right)
-\tag{10.14}
-$$
+```math
+N = 2 \left( \mathop{\mathrm{int}} \left[ \frac{P + \delta t}{2\delta t} \right] \right) \qquad\qquad(10.14)
+```
 
 where
 
-$$
-P = 2\pi \sqrt{\frac{\left(\overline{a^{-1}_{\text{ref}}}\right)^3}{\mu_{\text{CB}}}}
-\tag{10.15}
-$$
+```math
+P = 2\pi \sqrt{\frac{\Bigl(\overline{a^{-1}_{\text{ref}}}\Bigr)^3}{\mu_{\text{CB}}}} \qquad\qquad(10.15)
+```
 
 and
 
-- $\mu_{\text{CB}}$ = gravitation constant of the central body
-- $\overline{a^{-1}_{\text{ref}}}$ = reference averaged semi-major axis associated with the prior set of reference averaged equinoctial elements
+- $`\mu_{\text{CB}}`$ = gravitation constant of the central body
+- $`\overline{a^{-1}_{\text{ref}}}`$ = reference averaged semi-major axis associated with the prior set of reference averaged equinoctial elements
 
 Equinoctial element rates for semi-major axis and mean longitude are computed as follows using the average for each element over the current and previous orbital periods:
 
-$$
-\overline{\dot{a}^0_{\text{ref}}} = \frac{1}{t_{\text{ref}} - t^{-1}_{\text{ref}}} \left[ \overline{a^0_{\text{ref}}} - \overline{a^{-1}_{\text{ref}}} \right]
-\tag{10.16}
-$$
+```math
+\overline{\dot{a}^0_{\text{ref}}} = \frac{1}{t_{\text{ref}} - t^{-1}_{\text{ref}}} \Bigl[ \overline{a^0_{\text{ref}}} - \overline{a^{-1}_{\text{ref}}} \Bigr] \qquad\qquad(10.16)
+```
 
-$$
-\overline{\dot{\lambda}^0_{\text{ref}}} = \frac{1}{t_{\text{ref}} - t^{-1}_{\text{ref}}} \left[ \overline{\lambda^0_{\text{ref}}} - \overline{\lambda^{-1}_{\text{ref}}} + 2\pi \right]
-\tag{10.17}
-$$
+```math
+\overline{\dot{\lambda}^0_{\text{ref}}} = \frac{1}{t_{\text{ref}} - t^{-1}_{\text{ref}}} \Bigl[ \overline{\lambda^0_{\text{ref}}} - \overline{\lambda^{-1}_{\text{ref}}} + 2\pi \Bigr] \qquad\qquad(10.17)
+```
 
 Averaged equinoctial elements assume that there is not a large change in the eccentricity vector or node over successive orbital periods; hence they should not be used over large discrete maneuvers unless special care is taken. Therefore, generally, rates for the other elements are assumed to be zero. If a maneuver does occur, the computation should be restarted.
 
-To obtain the averaged equinoctial state vector at the current time, $t_c$, perform the computation as follows:
+To obtain the averaged equinoctial state vector at the current time, $`t_c`$, perform the computation as follows:
 
-$$
-\overline{\overline{E}(t_c)} = \overline{\overline{E}^{-2}_{\text{ref}}} + \overline{\dot{\overline{E}}^{-2}_{\text{ref}}}\,\Delta t
-\tag{10.18}
-$$
+```math
+\overline{\overline{E}(t_c)} = \overline{\overline{E}^{-2}_{\text{ref}}} + \overline{\dot{\overline{E}}^{-2}_{\text{ref}}}\,\Delta t \qquad\qquad(10.18)
+```
 
 where
 
-- $\overline{\overline{E}(t_c)}$ = vector of averaged equinoctial elements (listed in Table [2\)](#page-131-0) evaluated at time $t_c$
-- $\overline{\overline{E}^{-2}_{\text{ref}}}$ = vector of reference averaged equinoctial elements at reference time $t^{-2}_{\text{ref}}$
-- $\overline{\dot{\overline{E}}^{-2}_{\text{ref}}}$ = vector of reference averaged equinoctial element rates at reference time $t^{-2}_{\text{ref}}$
-- $t^{-2}_{\text{ref}}$ = reference time of the reference equinoctial elements and rates computed over the orbital period prior to the last
-- $\Delta t$ = the time difference between the current time and the time of the reference equinoctial elements and rates two orbits prior, $t_c - t^{-2}_{\text{ref}}$
+- $`\overline{\overline{E}(t_c)}`$ = vector of averaged equinoctial elements (listed in Table [2\)](#page-131-0) evaluated at time $`t_c`$
+- $`\overline{\overline{E}^{-2}_{\text{ref}}}`$ = vector of reference averaged equinoctial elements at reference time $`t^{-2}_{\text{ref}}`$
+- $`\overline{\dot{\overline{E}}^{-2}_{\text{ref}}}`$ = vector of reference averaged equinoctial element rates at reference time $`t^{-2}_{\text{ref}}`$
+- $`t^{-2}_{\text{ref}}`$ = reference time of the reference equinoctial elements and rates computed over the orbital period prior to the last
+- $`\Delta t`$ = the time difference between the current time and the time of the reference equinoctial elements and rates two orbits prior, $`t_c - t^{-2}_{\text{ref}}`$
 
 ## 10.4. Ground System Considerations
 
@@ -315,4 +297,4 @@ Careful consideration should be given to comprehensive operations concepts and u
 
 ---
 
-[← Chapter 9. Attitude Estimation](09-attitude-estimation.md) · [Contents](README.md) · [Chapter 11. Smoothing →](11-smoothing.md)
+[← Chapter 9. Attitude Estimation (part 2 of 2)](09-attitude-estimation-part2.md) · [Contents](README.md) · [Chapter 11. Smoothing →](11-smoothing.md)

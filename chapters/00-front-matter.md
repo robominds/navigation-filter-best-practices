@@ -72,7 +72,7 @@ This material is declared a work of the US Government and is not subject to copy
 
 ---
 
-> If there be two subsequent events, the probability of the second $b/N$ and the probability of both together $P/N$, and it being first discovered that the second event has also happened, from hence I guess that the first event has also happened, the probability I am right is $P/b$.
+> If there be two subsequent events, the probability of the second $`b/N`$ and the probability of both together $`P/N`$, and it being first discovered that the second event has also happened, from hence I guess that the first event has also happened, the probability I am right is $`P/b`$.
 >
 > — Thomas Bayes, c. 1760
 
@@ -269,29 +269,29 @@ Finally, the contributors intend for this work to be a living document, which wi
 <span id="page-22-0"></span>
 
 | Symbol | Meaning |
-|:---:|---|
-| $\mathbb{A}$ | A set |
-| $a, \alpha, A$ | Scalars |
-| $\mathbf{q}, \mathbf{M}$ | An array of scalars, e.g. column, row, matrix |
-| $\boldsymbol{x}$ | A point in an abstract vector space |
-| $\vec{\boldsymbol{r}}$ | A physical vector, i.e. an arrow in 3-D space |
-| $\mathcal{F}$ | A coordinate frame |
-| $\mathbf{M}^{\mathsf{T}}$ | The transpose of the array $\mathbf{M}$ |
-| $\lVert \boldsymbol{x} \rVert$ | The (2-)norm of the vector $\boldsymbol{x}$ |
-| $\mathsf{y}$ | A random variable |
-| $\boldsymbol{\mathsf{z}}$ | A random vector |
-| $\mathrm{p}_{\mathsf{x}}(x)$ | The probability density function of the random variable $\mathsf{x}$ evaluated at the realization $x$ |
-| $\Pr(\mathsf{y} < Y)$ | The probability that $\mathsf{y} < Y$ |
-| $\mathrm{E}[\boldsymbol{\mathsf{z}}]$ | The expectation of the random vector $\boldsymbol{\mathsf{z}}$ |
-| $\exp(t)$ | The exponential function of $t$ |
-| $\mathrm{e}^{t}$ | $\exp(t)$ written as Euler's number raised to the $t$ power |
-| $\mathrm{d}x$ | Leibniz' (total) differential of $x$ |
-| $\dfrac{\mathrm{d}y}{\mathrm{d}x}$ | (First) (total) derivative of $y$ with respect to $x$ |
-| $\dfrac{\mathrm{d}^{n}y}{\mathrm{d}x^{n}} = \dfrac{\mathrm{d}^{n}}{\mathrm{d}x^{n}}\,y$ | $n$th (total) derivative of $y$ with respect to $x$ |
-| $\dfrac{{}^{\mathcal{F}}\mathrm{d}^{n}}{\mathrm{d}t^{n}}\,\vec{\boldsymbol{r}}$ | $n$th (total) derivative of $\vec{\boldsymbol{r}}$ with respect to $t$ in frame $\mathcal{F}$ |
-| $\dfrac{\partial \mathbf{M}}{\partial \boldsymbol{x}}$ | (First) partial derivative of $\mathbf{M}$ with respect to $\boldsymbol{x}$ |
-| $\left.\dfrac{\partial M}{\partial x}\right\rvert_{x_o}$ | (First) partial of $M$ with respect to $x$, evaluated at $x_o$ |
-| $\dot{x}, \ddot{x}$, etc. | Overdots may be used as a shorthand for time derivatives |
+|---|---|
+| $`{𝔸}`$ | A set |
+| $`a, \alpha, A`$ | Scalars |
+| $`{𝐪}, {𝐌}`$ | An array of scalars, e.g. column, row, matrix |
+| $`{𝒙}`$ | A point in an abstract vector space |
+| $`\vec{{𝒓}}`$ | A physical vector, i.e. an arrow in 3-D space |
+| $`{ℱ}`$ | A coordinate frame |
+| $`{𝐌}^{{𝖳}}`$ | The transpose of the array $`{𝐌}`$ |
+| $`\lVert {𝒙} \rVert`$ | The (2-)norm of the vector $`{𝒙}`$ |
+| $`{𝗒}`$ | A random variable |
+| $`{𝘇}`$ | A random vector |
+| $`\mathrm{p}_{{𝗑}}(x)`$ | The probability density function of the random variable $`{𝗑}`$ evaluated at the realization $`x`$ |
+| $`\Pr({𝗒} \lt Y)`$ | The probability that $`{𝗒} \lt Y`$ |
+| $`\mathrm{E}[{𝘇}]`$ | The expectation of the random vector $`{𝘇}`$ |
+| $`\exp(t)`$ | The exponential function of $`t`$ |
+| $`\mathrm{e}^{t}`$ | $`\exp(t)`$ written as Euler's number raised to the $`t`$ power |
+| $`\mathrm{d}x`$ | Leibniz' (total) differential of $`x`$ |
+| $`\dfrac{\mathrm{d}y}{\mathrm{d}x}`$ | (First) (total) derivative of $`y`$ with respect to $`x`$ |
+| $`\dfrac{\mathrm{d}^{n}y}{\mathrm{d}x^{n}} = \dfrac{\mathrm{d}^{n}}{\mathrm{d}x^{n}}\,y`$ | $`n`$th (total) derivative of $`y`$ with respect to $`x`$ |
+| $`\dfrac{{}^{{ℱ}}\mathrm{d}^{n}}{\mathrm{d}t^{n}}\,\vec{{𝒓}}`$ | $`n`$th (total) derivative of $`\vec{{𝒓}}`$ with respect to $`t`$ in frame $`{ℱ}`$ |
+| $`\dfrac{\partial {𝐌}}{\partial {𝒙}}`$ | (First) partial derivative of $`{𝐌}`$ with respect to $`{𝒙}`$ |
+| $`\left.\dfrac{\partial M}{\partial x}\right\rvert_{x_o}`$ | (First) partial of $`M`$ with respect to $`x`$, evaluated at $`x_o`$ |
+| $`\dot{x}, \ddot{x}`$, etc. | Overdots may be used as a shorthand for time derivatives |
 
 ---
 

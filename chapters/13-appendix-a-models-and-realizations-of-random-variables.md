@@ -1,61 +1,61 @@
-[← Chapter 12. Advanced Estimation Algorithms](12-advanced-estimation-algorithms.md) · [Contents](README.md) · [Appendix B. The Mathematics Behind the UDU Factorization →](14-appendix-b-the-mathematics-behind-the-udu-factorization.md)
+[← Chapter 12. Advanced Estimation Algorithms](12-advanced-estimation-algorithms.md) · [Contents](README.md) · [Appendix B. The Mathematics Behind the UDU Factorization (part 1 of 3) →](14-appendix-b-the-mathematics-behind-the-udu-factorization-part1.md)
 
 # <span id="page-146-0"></span>Appendix A. Models and Realizations of Random Variables
 
 *Contributed by J. Russell Carpenter*
 
-A continuous random variable is a function that maps the outcomes of random events to the real line. Realizations of random variables are thus real numbers. A vector of $n$ random variables maps outcomes of random events to $\mathbb{R}^n$. For our purposes, random variables will always be associated with a probability density function that indicates the likelihood that a realization occurs within a particular interval of the real line, or within a particular subspace of $\mathbb{R}^n$ for the vector case. It is common to assume that this density is the normal or Gaussian density. For the vector case, the normal probability density function is
+A continuous random variable is a function that maps the outcomes of random events to the real line. Realizations of random variables are thus real numbers. A vector of $`n`$ random variables maps outcomes of random events to $`{ℝ}^n`$. For our purposes, random variables will always be associated with a probability density function that indicates the likelihood that a realization occurs within a particular interval of the real line, or within a particular subspace of $`{ℝ}^n`$ for the vector case. It is common to assume that this density is the normal or Gaussian density. For the vector case, the normal probability density function is
 
-$$
-\mathrm{p}_{\boldsymbol{\mathsf{x}}}(\boldsymbol{x}) = \frac{1}{\sqrt{\vert 2\pi\mathbf{P} \vert}}\, \mathrm{e}^{-\frac{1}{2}(\boldsymbol{x}-\boldsymbol{\mu})^{\mathsf{T}}\mathbf{P}^{-1}(\boldsymbol{x}-\boldsymbol{\mu})} \tag{A.1}
-$$
+```math
+\mathrm{p}_{{𝘅}}({𝒙}) = \frac{1}{\sqrt{\vert 2\pi{𝐏} \vert}}\, \mathrm{e}^{-\frac{1}{2}({𝒙}-{𝝁})^{{𝖳}}{𝐏}^{-1}({𝒙}-{𝝁})} \qquad\qquad(A.1)
+```
 
-where $\boldsymbol{\mu}$ is a vector of mean values for each component of $\boldsymbol{\mathsf{x}}$, and $\mathbf{P}$ is a matrix that contains the variances of each component of $\boldsymbol{\mathsf{x}}$ along its diagonal, and the covariances between each component as its off-diagonal components. The covariances indicate the degree of correlation between the random variables composing $\boldsymbol{\mathsf{x}}$. The matrix $\mathbf{P}$ is thus called the variance-covariance matrix, which we will hereafter abbreviate to just "covariance matrix," or "covariance." Since the normal density is completely characterized by its mean and covariance, we will use the following notation as a shorthand to describe drawing a realization from a normally-distributed random vector:
+where $`{𝝁}`$ is a vector of mean values for each component of $`{𝘅}`$, and $`{𝐏}`$ is a matrix that contains the variances of each component of $`{𝘅}`$ along its diagonal, and the covariances between each component as its off-diagonal components. The covariances indicate the degree of correlation between the random variables composing $`{𝘅}`$. The matrix $`{𝐏}`$ is thus called the variance-covariance matrix, which we will hereafter abbreviate to just "covariance matrix," or "covariance." Since the normal density is completely characterized by its mean and covariance, we will use the following notation as a shorthand to describe drawing a realization from a normally-distributed random vector:
 
-$$
-\boldsymbol{x} \sim N(\boldsymbol{\mu}, \mathbf{P}) \tag{A.2}
-$$
+```math
+{𝒙} \sim N({𝝁}, {𝐏}) \qquad\qquad(A.2)
+```
 
 Thus, the model for realizations of a measurement noise vector is
 
-$$
-\boldsymbol{v} \sim N(\mathbf{0}, \mathbf{R}) \tag{A.3}
-$$
+```math
+{𝒗} \sim N({𝟎}, {𝐑}) \qquad\qquad(A.3)
+```
 
-For the scalar case, or for the vector case when the covariance is diagonal, we may directly generate realizations of a normally-distributed random vector from normal random number generators available in most software libraries. If $\mathbf{P}$ has non-zero off-diagonal elements, we must model the specified correlations when we generate realizations. If $\mathbf{P}$ is strictly positive definite, we can factor it as follows:
+For the scalar case, or for the vector case when the covariance is diagonal, we may directly generate realizations of a normally-distributed random vector from normal random number generators available in most software libraries. If $`{𝐏}`$ has non-zero off-diagonal elements, we must model the specified correlations when we generate realizations. If $`{𝐏}`$ is strictly positive definite, we can factor it as follows:
 
-$$
-\mathbf{P} = {}^{C}\!\sqrt{\mathbf{P}}\, {}^{C}\!\sqrt{\mathbf{P}}^{\mathsf{T}} \tag{A.4}
-$$
+```math
+{𝐏} = {}^{C}\!\sqrt{{𝐏}}\, {}^{C}\!\sqrt{{𝐏}}^{{𝖳}} \qquad\qquad(A.4)
+```
 
-where ${}^{C}\!\sqrt{\mathbf{P}}$ is a triangular matrix known as a Cholesky factor; this can be viewed as a "matrix square root." The Cholesky factorization is available in many linear algebra libraries. We can then use ${}^{C}\!\sqrt{\mathbf{P}}$ to generate correlated realizations of $\boldsymbol{\mathsf{x}}$ as follows. Let $\boldsymbol{z}$ be a realization of a normally-distributed random vector of the same dimension as $\boldsymbol{\mathsf{x}}$, with zero mean and unit variance, that is
+where $`{}^{C}\!\sqrt{{𝐏}}`$ is a triangular matrix known as a Cholesky factor; this can be viewed as a "matrix square root." The Cholesky factorization is available in many linear algebra libraries. We can then use $`{}^{C}\!\sqrt{{𝐏}}`$ to generate correlated realizations of $`{𝘅}`$ as follows. Let $`{𝒛}`$ be a realization of a normally-distributed random vector of the same dimension as $`{𝘅}`$, with zero mean and unit variance, that is
 
-$$
-\boldsymbol{z} \sim N(\mathbf{0}, \mathbf{I}) \tag{A.5}
-$$
+```math
+{𝒛} \sim N({𝟎}, {𝐈}) \qquad\qquad(A.5)
+```
 
 Then, with
 
-$$
-\boldsymbol{x} = {}^{C}\!\sqrt{\mathbf{P}}\, \boldsymbol{z} \tag{A.6}
-$$
+```math
+{𝒙} = {}^{C}\!\sqrt{{𝐏}}\, {𝒛} \qquad\qquad(A.6)
+```
 
-we can generate properly correlated realizations of $\boldsymbol{\mathsf{x}}$. We can also use a Cholesky factorization of the measurement noise covariance $\mathbf{R}$, if $\mathbf{R}$ is non-diagonal, to transform correlated measurements into uncorrelated auxiliary measurements for cases in which the estimator cannot handle correlated measurement data.
+we can generate properly correlated realizations of $`{𝘅}`$. We can also use a Cholesky factorization of the measurement noise covariance $`{𝐑}`$, if $`{𝐑}`$ is non-diagonal, to transform correlated measurements into uncorrelated auxiliary measurements for cases in which the estimator cannot handle correlated measurement data.
 
-If $\mathbf{P}$ is only non-negative definite, i.e. $\mathbf{P} \geq 0$ rather than $\mathbf{P} > 0$ as above, the Cholesky factorization does not exist. In this case, since $\mathbf{P}$'s eigenvalues are real and distinct, it has a diagonal factorization:
+If $`{𝐏}`$ is only non-negative definite, i.e. $`{𝐏} \geq 0`$ rather than $`{𝐏} \gt 0`$ as above, the Cholesky factorization does not exist. In this case, since $`{𝐏}`$'s eigenvalues are real and distinct, it has a diagonal factorization:
 
-$$
-\mathbf{P} = \mathbf{V}\mathbf{D}\mathbf{V}^{\mathsf{T}} \tag{A.7}
-$$
+```math
+{𝐏} = {𝐕}{𝐃}{𝐕}^{{𝖳}} \qquad\qquad(A.7)
+```
 
-where $\mathbf{V}$ is a matrix of eigenvectors and $\mathbf{D}$ is a diagonal matrix of eigenvalues. Then, with $\boldsymbol{z}$ as above,
+where $`{𝐕}`$ is a matrix of eigenvectors and $`{𝐃}`$ is a diagonal matrix of eigenvalues. Then, with $`{𝒛}`$ as above,
 
-$$
-\boldsymbol{x} = \mathbf{V}\sqrt{\mathbf{D}}\, \boldsymbol{z} \tag{A.8}
-$$
+```math
+{𝒙} = {𝐕}\sqrt{{𝐃}}\, {𝒛} \qquad\qquad(A.8)
+```
 
-where $\sqrt{\mathbf{D}}$ implies taking the square roots of each diagonal element.
+where $`\sqrt{{𝐃}}`$ implies taking the square roots of each diagonal element.
 
 ---
 
-[← Chapter 12. Advanced Estimation Algorithms](12-advanced-estimation-algorithms.md) · [Contents](README.md) · [Appendix B. The Mathematics Behind the UDU Factorization →](14-appendix-b-the-mathematics-behind-the-udu-factorization.md)
+[← Chapter 12. Advanced Estimation Algorithms](12-advanced-estimation-algorithms.md) · [Contents](README.md) · [Appendix B. The Mathematics Behind the UDU Factorization (part 1 of 3) →](14-appendix-b-the-mathematics-behind-the-udu-factorization-part1.md)

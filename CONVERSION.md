@@ -105,9 +105,35 @@ The cosmetic findings were fixed:
 - a stray space in eq. 10.12 was removed;
 - a misplaced apostrophe in a link was moved.
 
-### GitHub chapter split
+### Where each version renders
 
-The single file is just over GitHub's 512 KiB limit for rendering Markdown. `tools/split.py` therefore generates `chapters/`, with one file each for the front matter, every chapter and appendix, the bibliography and the index. Links into other chapter files are rewritten as `file.md#anchor`, image paths are adjusted for the subdirectory, and each file gets previous/next navigation. All 578 links and all 760 equation tags were checked in the split output. The single file remains the canonical source.
+- **Single file:** standard LaTeX math, with `\tag` numbering and `\mathbf`/`\mathsf`/`\mathcal` fonts. The editor checked it in VS Code's built-in Markdown preview on macOS, where it renders correctly. GitHub does not render it: it is over the 512 KiB limit, and GitHub's quirks (below) would affect it anyway.
+- **`chapters/`:** written for GitHub and verified there in Chrome and WebKit, as described below. Because of the workarounds, its TeX source differs in form from the single file (Unicode letters, `\qquad(n.m)` numbers, fixed-size delimiters in a few places), but the mathematics is the same.
+
+### GitHub rendering
+
+The single file is just over GitHub's 512 KiB limit for rendering Markdown. `tools/split.py` therefore generates `chapters/`, with one page for the front matter and for each chapter, appendix, the bibliography and the index. Links into other pages are rewritten as `file.md#anchor`, image paths are adjusted, and each page gets previous/next navigation.
+
+Testing on GitHub turned up several quirks in its math handling, each fixed in the generated pages:
+
+| Quirk | Workaround in `chapters/` |
+|---|---|
+| `\operatorname` is rejected ("The following macros are not allowed") | Replaced everywhere, including the single file, with `\mathop{\mathrm{…}}`. `\hdashline` was likewise replaced with `\hline` |
+| Markdown backslash-escaping is applied inside `$…$` and `$$…$$`, so `\,` becomes `,`, `\\` becomes `\`, and `X^*_m` loses its `*` | Math is written as ` ```math ` blocks and `` $`…`$ `` spans, which GitHub passes through verbatim |
+| `<` and `>` in math, and `&` in inline spans, are double-escaped | `\lt`/`\gt` are used, and the 7 inline matrices are rebuilt without `&` |
+| A `\\` at the end of a line gets an extra backslash | Each display block is written on one line |
+| Display math inside a list that also contains inline math is not rendered | Display blocks are moved out of lists |
+| Past a certain amount of math on a page (seen from about 18,000 TeX characters), GitHub shows "Unable to render expression" for the rest of the page | Chapters 3, 6, 8 and 9 and Appendix B are split at section boundaries, keeping each page under about 12,000 characters of math |
+| Safari clips inline math in a **centred** table column with a scrollbar | The Notational Conventions symbol column is left-aligned |
+| GitHub gives MathJax's output to the browser as native MathML, and Chrome can't lay out `<mlabeledtr>`, which `\tag` produces. Numbered equations collapse into a one-character-wide column | Equation numbers are written after the equation as `\qquad(n.m)` |
+| Chrome ignores MathML's `mathvariant`, so `\mathbf`, `\boldsymbol`, `\mathsf`, `\mathcal` and `\mathbb` all show as plain italic | These commands become Unicode mathematical letters (𝐗, 𝒙, 𝗫, 𝓕, 𝕐, 𝚽, …), which keep their font in every browser |
+| Chrome mis-positions a sub+superscripted term inside stretchy `\left…\right` fences (eqs 7.31, 8.31, 8.35, 8.58, B.8) | Pairs that contain such a term use fixed-size `\Bigl`/`\biggl` delimiters |
+| Safari clips `\widetilde` with a small scrollbar | On single symbols, where it looks the same, `\tilde` is used in `chapters/`. The single file keeps `\widetilde` |
+
+Verification:
+- `tools/github-check.py` renders every page through the GitHub Markdown API and confirms the TeX reaching MathJax is byte-identical to the source.
+- `tools/browser-check.js` loads every page in headless Chrome and WebKit. It confirms that all 2,538 expressions render, and that none fails, is clipped, is laid out out of order, or uses MathML that Chrome can't display.
+- In the split output, all 578 links resolve and all 760 equation tags are present.
 
 ## 5. Deliberate deviations from the PDF
 
