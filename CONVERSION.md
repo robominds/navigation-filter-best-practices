@@ -105,6 +105,10 @@ The cosmetic findings were fixed:
 - a stray space in eq. 10.12 was removed;
 - a misplaced apostrophe in a link was moved.
 
+### GitHub chapter split
+
+The single file is just over GitHub's 512 KiB limit for rendering Markdown. `tools/split.py` therefore generates `chapters/`, with one file each for the front matter, every chapter and appendix, the bibliography and the index. Links into other chapter files are rewritten as `file.md#anchor`, image paths are adjusted for the subdirectory, and each file gets previous/next navigation. All 578 links and all 760 equation tags were checked in the split output. The single file remains the canonical source.
+
 ## 5. Deliberate deviations from the PDF
 
 ### Content corrections

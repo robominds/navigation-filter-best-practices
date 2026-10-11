@@ -1,0 +1,22 @@
+# Navigation Filter Best Practices: Chapters
+
+Generated from the single-file edition by `tools/split.py`; edit the single file, not these.
+
+- [Front Matter](00-front-matter.md)
+- [Chapter 1. The Extended Kalman Filter](01-the-extended-kalman-filter.md)
+- [Chapter 2. Batch-Sequential Filters](02-batch-sequential-filters.md)
+- [Chapter 3. The Covariance Matrix](03-the-covariance-matrix.md)
+- [Chapter 4. Processing Measurements](04-processing-measurements.md)
+- [Chapter 5. Measurement Underweighting](05-measurement-underweighting.md)
+- [Chapter 6. Bias Modeling](06-bias-modeling.md)
+- [Chapter 7. State Representations](07-state-representations.md)
+- [Chapter 8. Factorization Methods](08-factorization-methods.md)
+- [Chapter 9. Attitude Estimation](09-attitude-estimation.md)
+- [Chapter 10. Usability Considerations](10-usability-considerations.md)
+- [Chapter 11. Smoothing](11-smoothing.md)
+- [Chapter 12. Advanced Estimation Algorithms](12-advanced-estimation-algorithms.md)
+- [Appendix A. Models and Realizations of Random Variables](13-appendix-a-models-and-realizations-of-random-variables.md)
+- [Appendix B. The Mathematics Behind the UDU Factorization](14-appendix-b-the-mathematics-behind-the-udu-factorization.md)
+- [Appendix C. An Analysis of Dual Inertial-Absolute and Inertial-Relative Navigation Filters](15-appendix-c-an-analysis-of-dual-inertial-absolute-and-inertial-relative.md)
+- [Bibliography](16-bibliography.md)
+- [Index of Best Practices](17-index-of-best-practices.md)
